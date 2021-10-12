@@ -7,9 +7,10 @@ import {FeatureSourceForLayer} from "../FeatureSource";
 
 export default class SaveTileToLocalStorageActor {
     public static readonly storageKey: string = "cached-features";
-    public static readonly formatVersion: string = "1"
+    public static readonly formatVersion: string = "2"
 
     constructor(source: FeatureSourceForLayer, tileIndex: number) {
+        
         source.features.addCallbackAndRunD(features => {
             const key = `${SaveTileToLocalStorageActor.storageKey}-${source.layer.layerDef.id}-${tileIndex}`
             const now = new Date()
@@ -35,6 +36,5 @@ export default class SaveTileToLocalStorageActor {
         }catch(e){
             console.error("Could not mark tile ", key, "as visited")
         }
-
     }
 }
