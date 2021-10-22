@@ -32,8 +32,8 @@
   "enablePdfDownload": true,
   "enableDownload": true,
   "hideFromOverview": true,
+  "#": "Disable clustering for this theme",
   "clustering": {
-    "#": "Disable clustering for this theme",
     "maxZoom": 0
   },
   "layers": [
@@ -71,7 +71,6 @@
             ]
           },
           "geoJson": "https://pietervdvn.github.io/natuurpunt_cache/natuurpunt_nature_reserve_points.geojson",
-          "geoJsonZoomLevel": 0,
           "isOsmCache": "duplicate"
         },
         "minzoom": 1,
@@ -112,7 +111,7 @@
           "geoJsonZoomLevel": 12,
           "isOsmCache": true
         },
-        "minzoom": "13",
+        "minzoom": 10,
         "icon": {
           "render": "circle:#FE6F32;./assets/themes/natuurpunt/trail.svg",
           "mappings": [
@@ -264,5 +263,6 @@
         }
       }
     }
-  ]
+  ],
+  "enableIframePopout": false
 }

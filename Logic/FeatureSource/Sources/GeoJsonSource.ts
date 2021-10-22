@@ -68,10 +68,10 @@ export default class GeoJsonSource implements FeatureSourceForLayer, Tiled {
         const self = this;
         Utils.downloadJson(url)
             .then(json => {
-                if (json.elements === [] && json.remarks.indexOf("runtime error") > 0) {
-                    self.onFail("Runtime error (timeout)", url)
+                if(json.features === undefined || json.features === null){
                     return;
                 }
+
                 const time = new Date();
                 const newFeatures: { feature: any, freshness: Date } [] = []
                 let i = 0;
@@ -108,7 +108,7 @@ export default class GeoJsonSource implements FeatureSourceForLayer, Tiled {
                     newFeatures.push({feature: feature, freshness: freshness})
                 }
 
-                if (newFeatures.length == 0) {
+                if ( newFeatures.length == 0) {
                     return;
                 }
 

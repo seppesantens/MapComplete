@@ -11,7 +11,7 @@ export abstract class OsmObject {
     private static polygonFeatures = OsmObject.constructPolygonFeatures()
     private static objectCache = new Map<string, UIEventSource<OsmObject>>();
     private static historyCache = new Map<string, UIEventSource<OsmObject[]>>();
-    type: string;
+    type: "node" | "way" | "relation";
     id: number;
     /**
      * The OSM tags as simple object
@@ -23,6 +23,7 @@ export abstract class OsmObject {
 
     protected constructor(type: string, id: number) {
         this.id = id;
+        // @ts-ignore
         this.type = type;
         this.tags = {
             id: `${this.type}/${id}`
@@ -58,14 +59,13 @@ export abstract class OsmObject {
     
     static async DownloadPropertiesOf(id: string): Promise<any> {
         const splitted = id.split("/");
-        const type = splitted[0];
         const idN = Number(splitted[1]);
         if (idN < 0) {
             return undefined;
         }
 
         const url = `${OsmObject.backendURL}api/0.6/${id}`;
-        const rawData = await Utils.downloadJson(url)
+        const rawData = await Utils.downloadJsonCached(url, 1000)
         return rawData.elements[0].tags
     }
 
@@ -79,7 +79,7 @@ export abstract class OsmObject {
 
         const full = (id.startsWith("way")) ? "/full" : "";
         const url = `${OsmObject.backendURL}api/0.6/${id}${full}`;
-        const rawData = await Utils.downloadJson(url)
+        const rawData = await Utils.downloadJsonCached(url, 1000)
         // A full query might contain more then just the requested object (e.g. nodes that are part of a way, where we only want the way)
         const parsed = OsmObject.ParseObjects(rawData.elements);
         // Lets fetch the object we need
@@ -104,7 +104,7 @@ export abstract class OsmObject {
      * Beware: their geometry will be incomplete!
      */
     public static DownloadReferencingWays(id: string): Promise<OsmWay[]> {
-        return Utils.downloadJson(`${OsmObject.backendURL}api/0.6/${id}/ways`).then(
+        return Utils.downloadJsonCached(`${OsmObject.backendURL}api/0.6/${id}/ways`, 60 * 1000).then(
             data => {
                 return data.elements.map(wayInfo => {
                     const way = new OsmWay(wayInfo.id)
@@ -120,7 +120,7 @@ export abstract class OsmObject {
      * Beware: their geometry will be incomplete!
      */
     public static async DownloadReferencingRelations(id: string): Promise<OsmRelation[]> {
-        const data = await Utils.downloadJson(`${OsmObject.backendURL}api/0.6/${id}/relations`)
+        const data = await Utils.downloadJsonCached(`${OsmObject.backendURL}api/0.6/${id}/relations`, 60 * 1000)
         return data.elements.map(wayInfo => {
             const rel = new OsmRelation(wayInfo.id)
             rel.LoadData(wayInfo)
@@ -138,7 +138,7 @@ export abstract class OsmObject {
         const idN = Number(splitted[1]);
         const src = new UIEventSource<OsmObject[]>([]);
         OsmObject.historyCache.set(id, src);
-        Utils.downloadJson(`${OsmObject.backendURL}api/0.6/${type}/${idN}/history`).then(data => {
+        Utils.downloadJsonCached(`${OsmObject.backendURL}api/0.6/${type}/${idN}/history`, 10 * 60 * 1000).then(data => {
             const elements: any[] = data.elements;
             const osmObjects: OsmObject[] = []
             for (const element of elements) {
@@ -263,7 +263,7 @@ export abstract class OsmObject {
                 continue;
             }
             const v = this.tags[key];
-            if (v !== "") {
+            if (v !== "" && v !== undefined) {
                 tags += '        <tag k="' + Utils.EncodeXmlValue(key) + '" v="' + Utils.EncodeXmlValue(this.tags[key]) + '"/>\n'
             }
         }

@@ -1,4 +1,77 @@
 {
+    "artwork": {
+        "description": "Diverse pieces of artwork",
+        "name": "Artworks",
+        "presets": {
+            "0": {
+                "title": "Artwork"
+            }
+        },
+        "tagRenderings": {
+            "artwork-artist_name": {
+                "question": "Which artist created this?",
+                "render": "Created by {artist_name}"
+            },
+            "artwork-artwork_type": {
+                "mappings": {
+                    "0": {
+                        "then": "Architecture"
+                    },
+                    "1": {
+                        "then": "Mural"
+                    },
+                    "2": {
+                        "then": "Painting"
+                    },
+                    "3": {
+                        "then": "Sculpture"
+                    },
+                    "4": {
+                        "then": "Statue"
+                    },
+                    "5": {
+                        "then": "Bust"
+                    },
+                    "6": {
+                        "then": "Stone"
+                    },
+                    "7": {
+                        "then": "Installation"
+                    },
+                    "8": {
+                        "then": "Graffiti"
+                    },
+                    "9": {
+                        "then": "Relief"
+                    },
+                    "10": {
+                        "then": "Azulejo (Spanish decorative tilework)"
+                    },
+                    "11": {
+                        "then": "Tilework"
+                    }
+                },
+                "question": "What is the type of this artwork?",
+                "render": "This is a {artwork_type}"
+            },
+            "artwork-website": {
+                "question": "Is there a website with more information about this artwork?",
+                "render": "More information on <a href='{website}' target='_blank'>this website</a>"
+            },
+            "artwork-wikidata": {
+                "question": "Which Wikidata-entry corresponds with <b>this artwork</b>?",
+                "render": "Corresponds with <a href='https://www.wikidata.org/wiki/{wikidata}' target='_blank'>{wikidata}</a>"
+            }
+        },
+        "title": {
+            "mappings": {
+                "0": {
+                    "then": "Artwork <i>{name}</i>"
+                }
+            },
+            "render": "Artwork"
+        }
+    },
     "barrier": {
         "description": "Obstacles while cycling, such as bollards and cycle barriers",
         "name": "Barriers",
@@ -967,7 +1040,7 @@
                         "then": "Authentication via debit card is available"
                     },
                     "7": {
-                        "then": "No authentication is needed"
+                        "then": "Charging here is (also) possible without authentication"
                     }
                 },
                 "question": "What kind of authentication is available at the charging station?"
@@ -2303,7 +2376,7 @@
                 "question": "Is this street lit?"
             },
             "width:carriageway": {
-                "question": "What is the carriage width of this road (in meters)?",
+                "question": "What is the carriage width of this road (in meters)?<br/><span class='subtle'>This is measured curb to curb and thus includes the width of parallell parking lanes</span>",
                 "render": "The carriage width of this road is <strong>{width:carriageway}m</strong>"
             }
         },
@@ -2498,6 +2571,34 @@
         },
         "title": {
             "render": "Drinking water"
+        }
+    },
+    "etymology": {
+        "description": "All objects which have an etymology known",
+        "name": "Has etymolgy",
+        "tagRenderings": {
+            "etymology_multi_apply": {
+                "render": "{multi_apply(_same_name_ids, name:etymology:wikidata;name:etymology, Auto-applying data on all segments with the same name, true)}"
+            },
+            "simple etymology": {
+                "mappings": {
+                    "0": {
+                        "then": "The origin of this name is unknown in all literature"
+                    }
+                },
+                "question": "What is this object named after?<br/><span class='subtle'>This might be written on the street name sign</span>",
+                "render": "Named after {name:etymology}"
+            },
+            "street-name-sign-image": {
+                "render": "{image_carousel(image:streetsign)}<br/>{image_upload(image:streetsign, Add image of a street name sign)}"
+            },
+            "wikipedia-etymology": {
+                "question": "What is the Wikidata-item that this object is named after?",
+                "render": "<h3>Wikipedia article of the name giver</h3>{wikipedia(name:etymology:wikidata):max-height:20rem}"
+            },
+            "zoeken op inventaris onroerend erfgoed": {
+                "render": "<a href='https://inventaris.onroerenderfgoed.be/erfgoedobjecten?tekst={name}' target='_blank'>Search on inventaris onroerend erfgoed</a>"
+            }
         }
     },
     "food": {
@@ -3080,6 +3181,75 @@
                 }
             },
             "render": "Bookcase"
+        }
+    },
+    "shops": {
+        "description": "A shop",
+        "name": "Shop",
+        "presets": {
+            "0": {
+                "description": "Add a new shop",
+                "title": "Shop"
+            }
+        },
+        "tagRenderings": {
+            "shops-email": {
+                "question": "What is the email address of this shop?",
+                "render": "<a href='mailto:{email}'>{email}</a>"
+            },
+            "shops-name": {
+                "question": "What is the name of this shop?"
+            },
+            "shops-opening_hours": {
+                "question": "What are the opening hours of this shop?",
+                "render": "{opening_hours_table(opening_hours)}"
+            },
+            "shops-phone": {
+                "question": "What is the phone number?",
+                "render": "<a href='tel:{phone}'>{phone}</a>"
+            },
+            "shops-shop": {
+                "mappings": {
+                    "0": {
+                        "then": "Convenience store"
+                    },
+                    "1": {
+                        "then": "Supermarket"
+                    },
+                    "2": {
+                        "then": "Clothing store"
+                    },
+                    "3": {
+                        "then": "Hairdresser"
+                    },
+                    "4": {
+                        "then": "Bakery"
+                    },
+                    "5": {
+                        "then": "Car repair (garage)"
+                    },
+                    "6": {
+                        "then": "Car dealer"
+                    }
+                },
+                "question": "What does this shop sell?",
+                "render": "This shop sells {shop}"
+            },
+            "shops-website": {
+                "question": "What is the website of this shop?",
+                "render": "<a href='{website}'>{website}</a>"
+            }
+        },
+        "title": {
+            "mappings": {
+                "0": {
+                    "then": "{name}"
+                },
+                "1": {
+                    "then": "{shop}"
+                }
+            },
+            "render": "Shop"
         }
     },
     "slow_roads": {
@@ -3685,6 +3855,20 @@
             }
         },
         "tagRenderings": {
+            "dispensing_dog_bags": {
+                "mappings": {
+                    "0": {
+                        "then": "This waste basket has a dispenser for (dog) excrement bags"
+                    },
+                    "1": {
+                        "then": "This waste basket <b>does not</b> have a dispenser for (dog) excrement bags"
+                    },
+                    "2": {
+                        "then": "This waste basket <b>does not</b> have a dispenser for (dog) excrement bags"
+                    }
+                },
+                "question": "Does this waste basket have a dispenser for dog excrement bags?"
+            },
             "waste-basket-waste-types": {
                 "mappings": {
                     "0": {

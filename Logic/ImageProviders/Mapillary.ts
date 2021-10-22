@@ -1,11 +1,9 @@
 import ImageProvider, {ProvidedImage} from "./ImageProvider";
 import BaseUIElement from "../../UI/BaseUIElement";
-import {UIEventSource} from "../UIEventSource";
 import Svg from "../../Svg";
 import {Utils} from "../../Utils";
 import {LicenseInfo} from "./LicenseInfo";
 import Constants from "../../Models/Constants";
-import {fail} from "assert";
 
 export class Mapillary extends ImageProvider {
 
@@ -13,16 +11,13 @@ export class Mapillary extends ImageProvider {
     
     public static readonly singleton = new Mapillary();
     private static readonly valuePrefix = "https://a.mapillary.com"
-    public static readonly valuePrefixes = [Mapillary.valuePrefix, "http://mapillary.com","https://mapillary.com"]
-
-    private constructor() {
-        super();
-    }
+    public static readonly valuePrefixes = [Mapillary.valuePrefix, "http://mapillary.com","https://mapillary.com","http://www.mapillary.com","https://www.mapillary.com"]
 
     private static ExtractKeyFromURL(value: string, failIfNoMath = false): {
         key: string,
         isApiv4?: boolean
     } {
+        
         if (value.startsWith(Mapillary.valuePrefix)) {
             const key = value.substring(0, value.lastIndexOf("?")).substring(value.lastIndexOf("/") + 1)
             return {key: key, isApiv4: !isNaN(Number(key))};
@@ -61,7 +56,7 @@ export class Mapillary extends ImageProvider {
     }
 
     async ExtractUrls(key: string, value: string): Promise<Promise<ProvidedImage>[]> {
-       return [this.PrepareUrlAsync(key, value)]
+        return [this.PrepareUrlAsync(key, value)]
     }
 
     private async PrepareUrlAsync(key: string, value: string): Promise<ProvidedImage> {

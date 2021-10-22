@@ -1,7 +1,6 @@
 import {VariableUiElement} from "../Base/VariableUIElement";
 import {AllKnownLayouts} from "../../Customizations/AllKnownLayouts";
 import Svg from "../../Svg";
-import State from "../../State";
 import Combine from "../Base/Combine";
 import {SubtleButton} from "../Base/SubtleButton";
 import Translations from "../i18n/Translations";
@@ -11,54 +10,88 @@ import LanguagePicker from "../LanguagePicker";
 import IndexText from "./IndexText";
 import BaseUIElement from "../BaseUIElement";
 import LayoutConfig from "../../Models/ThemeConfig/LayoutConfig";
+import {UIEventSource} from "../../Logic/UIEventSource";
+import Loc from "../../Models/Loc";
+import {OsmConnection} from "../../Logic/Osm/OsmConnection";
+import UserRelatedState from "../../Logic/State/UserRelatedState";
+import Toggle from "../Input/Toggle";
+import {Utils} from "../../Utils";
+import Title from "../Base/Title";
 
 export default class MoreScreen extends Combine {
 
 
-    constructor(onMainScreen: boolean = false) {
-        super(MoreScreen.Init(onMainScreen, State.state));
-    }
-
-    private static Init(onMainScreen: boolean, state: State): BaseUIElement [] {
+    constructor(state: UserRelatedState & {
+        locationControl?: UIEventSource<Loc>,
+        layoutToUse?: LayoutConfig
+    }, onMainScreen: boolean = false) {
         const tr = Translations.t.general.morescreen;
-        let intro: BaseUIElement = tr.intro.Clone();
         let themeButtonStyle = ""
         let themeListStyle = ""
         if (onMainScreen) {
-            intro = new Combine([
-                LanguagePicker.CreateLanguagePicker(Translations.t.index.title.SupportedLanguages())
-                    .SetClass("absolute top-2 right-3"),
-                new IndexText()
-            ]);
-
             themeButtonStyle = "h-32 min-h-32 max-h-32 overflow-ellipsis overflow-hidden"
             themeListStyle = "md:grid md:grid-flow-row md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-g4 gap-4"
         }
 
-        return [
-            intro,
+        super([
             MoreScreen.createOfficialThemesList(state, themeButtonStyle).SetClass(themeListStyle),
-            MoreScreen.createUnofficialThemeList(themeButtonStyle)?.SetClass(themeListStyle),
+            MoreScreen.createPreviouslyVistedHiddenList(state, themeButtonStyle, themeListStyle),
+            MoreScreen.createUnofficialThemeList(themeButtonStyle, state, themeListStyle),
             tr.streetcomplete.Clone().SetClass("block text-base mx-10 my-3 mb-10")
-        ];
+        ]);
     }
 
-    private static createUnofficialThemeList(buttonClass: string): BaseUIElement {
-        return new VariableUiElement(State.state.installedThemes.map(customThemes => {
-            const els: BaseUIElement[] = []
-            if (customThemes.length > 0) {
-                els.push(Translations.t.general.customThemeIntro.Clone())
 
-                const customThemesElement = new Combine(
-                    customThemes.map(theme => MoreScreen.createLinkButton(theme.layout, theme.definition)?.SetClass(buttonClass))
-                )
-                els.push(customThemesElement)
+    private static createUnofficialThemeList(buttonClass: string, state: UserRelatedState, themeListClasses): BaseUIElement {
+        return new VariableUiElement(state.installedThemes.map(customThemes => {
+            if (customThemes.length <= 0) {
+                return undefined;
             }
-            return els;
+            const customThemeButtons = customThemes.map(theme => MoreScreen.createLinkButton(state, theme.layout, theme.definition)?.SetClass(buttonClass))
+            return new Combine([
+                Translations.t.general.customThemeIntro.Clone(),
+                new Combine(customThemeButtons).SetClass(themeListClasses)
+            ]);
         }));
     }
 
-    private static createOfficialThemesList(state: State, buttonClass: string): BaseUIElement {
+    private static createPreviouslyVistedHiddenList(state: UserRelatedState, buttonClass: string, themeListStyle: string) {
+        const t = Translations.t.general.morescreen
+        const prefix = "mapcomplete-hidden-theme-"
+        const hiddenTotal = AllKnownLayouts.layoutsList.filter(layout => layout.hideFromOverview).length
+        return new Toggle(
+            new VariableUiElement(
+                state.osmConnection.preferencesHandler.preferences.map(allPreferences => {
+                    const knownThemes = Utils.NoNull(Object.keys(allPreferences)
+                        .filter(key => key.startsWith(prefix))
+                        .map(key => key.substring(prefix.length, key.length - "-enabled".length))
+                        .map(theme => {
+                            return AllKnownLayouts.allKnownLayouts.get(theme);
+                        }))
+                    if (knownThemes.length === 0) {
+                        return undefined
+                    }
+
+                    const knownLayouts = new Combine(knownThemes.map(layout =>
+                        MoreScreen.createLinkButton(state, layout)?.SetClass(buttonClass)
+                    )).SetClass(themeListStyle)
+
+                    return new Combine([
+                        new Title(t.previouslyHiddenTitle),
+                        t.hiddenExplanation.Subs({hidden_discovered: ""+knownThemes.length,total_hidden: ""+hiddenTotal}),
+                        knownLayouts
+                    ])
+
+                })
+            ).SetClass("flex flex-col"),
+            undefined,
+            state.osmConnection.isLoggedIn
+        )
+
+
+    }
+
+    private static createOfficialThemesList(state: { osmConnection: OsmConnection, locationControl?: UIEventSource<Loc> }, buttonClass: string): BaseUIElement {
         let officialThemes = AllKnownLayouts.layoutsList
 
         let buttons = officialThemes.map((layout) => {
@@ -66,10 +99,13 @@ export default class MoreScreen extends Combine {
                 console.trace("Layout is undefined")
                 return undefined
             }
-            const button = MoreScreen.createLinkButton(layout)?.SetClass(buttonClass);
+            if(layout.hideFromOverview){
+                return undefined;
+            }
+            const button = MoreScreen.createLinkButton(state, layout)?.SetClass(buttonClass);
             if (layout.id === personal.id) {
                 return new VariableUiElement(
-                    State.state.osmConnection.userDetails.map(userdetails => userdetails.csCount)
+                    state.osmConnection.userDetails.map(userdetails => userdetails.csCount)
                         .map(csCount => {
                             if (csCount < Constants.userJourney.personalLayoutUnlock) {
                                 return undefined
@@ -91,7 +127,7 @@ export default class MoreScreen extends Combine {
     /*
     * Returns either a link to the issue tracker or a link to the custom generator, depending on the achieved number of changesets
     * */
-    private static createCustomGeneratorButton(state: State): VariableUiElement {
+    private static createCustomGeneratorButton(state: { osmConnection: OsmConnection }): VariableUiElement {
         const tr = Translations.t.general.morescreen;
         return new VariableUiElement(
             state.osmConnection.userDetails.map(userDetails => {
@@ -111,11 +147,15 @@ export default class MoreScreen extends Combine {
 
     /**
      * Creates a button linking to the given theme
-     * @param layout
-     * @param customThemeDefinition
      * @private
      */
-    private static createLinkButton(layout: LayoutConfig, customThemeDefinition: string = undefined): BaseUIElement {
+    public static createLinkButton(
+        state: {
+            locationControl?: UIEventSource<Loc>,
+            layoutToUse?: LayoutConfig
+        }, layout: LayoutConfig, customThemeDefinition: string = undefined
+    ):
+        BaseUIElement {
         if (layout === undefined) {
             return undefined;
         }
@@ -123,14 +163,12 @@ export default class MoreScreen extends Combine {
             console.error("ID is undefined for layout", layout);
             return undefined;
         }
-        if (layout.hideFromOverview) {
-            return undefined;
-        }
-        if (layout.id === State.state.layoutToUse?.id) {
+        
+        if (layout.id === state?.layoutToUse?.id) {
             return undefined;
         }
 
-        const currentLocation = State.state.locationControl;
+        const currentLocation = state?.locationControl;
 
         let path = window.location.pathname;
         // Path starts with a '/' and contains everything, e.g. '/dir/dir/page.html'
@@ -151,7 +189,7 @@ export default class MoreScreen extends Combine {
             linkSuffix = `#${customThemeDefinition}`
         }
 
-        const linkText = currentLocation.map(currentLocation => {
+        const linkText = currentLocation?.map(currentLocation => {
             const params = [
                 ["z", currentLocation?.zoom],
                 ["lat", currentLocation?.lat],
@@ -160,7 +198,7 @@ export default class MoreScreen extends Combine {
                 .map(part => part[0] + "=" + part[1])
                 .join("&")
             return `${linkPrefix}${params}${linkSuffix}`;
-        })
+        }) ?? new UIEventSource<string>(`${linkPrefix}${linkSuffix}`)
 
 
         let description = Translations.WT(layout.shortDescription).Clone();

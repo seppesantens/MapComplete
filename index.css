@@ -20,6 +20,10 @@
         .z-above-controls {
             z-index: 10001
         }
+        
+        .w-160 {
+            width: 40rem;
+        }
     }
 
     .btn {
@@ -91,6 +95,10 @@ svg, img {
     box-sizing: content-box;
     width: 100%;
     height: 100%;
+}
+
+.no-images img {
+    display: none;
 }
 
 .mapcontrol svg path {
@@ -191,6 +199,10 @@ li::marker {
     border: 5px solid var(--catch-detail-color);
 }
 
+.border-attention {
+    border-color: var(--catch-detail-color);
+}
+
 .direction-svg svg path {
     fill: var(--catch-detail-color) !important;
 }
@@ -234,6 +246,27 @@ li::marker {
     max-width: 2em !important;
 }
 
+
+.block-ruby {
+    display: block ruby;
+}
+
+.disable-links a {
+    pointer-events: none;
+    text-decoration: none !important;
+    color: var(--subtle-detail-color-contrast) !important;
+}
+
+.enable-links a {
+    pointer-events: unset;
+    text-decoration: underline !important;
+    color: unset !important;
+}
+
+.disable-links a.must-link, .disable-links .must-link a {
+    /* Hide links if they are disabled */
+    display: none;
+}
 
 /**************** GENERIC ****************/
 

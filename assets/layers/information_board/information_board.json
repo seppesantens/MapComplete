@@ -50,8 +50,23 @@
                 "it": "pannello informativo",
                 "fr": "panneau d'informations",
                 "de": "informationstafel",
-                "ru": "Информационный щит"
+                "ru": "информационный щит"
             }
         }
-    ]
+    ],
+    "deletion": {
+        "softDeletionTags": {
+            "and": [
+                "disused:tourism:=information",
+                "tourism=",
+                "razed:information=board",
+                "information="
+            ]
+        },
+        "neededChangesets": 1
+    },
+    "allowMove": {
+        "enableRelocation": false,
+        "enableImproveAccuraccy": true
+    }
 }

@@ -1,6 +1,6 @@
 import {TagRenderingConfigJson} from "./TagRenderingConfigJson";
 import {LayerConfigJson} from "./LayerConfigJson";
-import UnitConfigJson from "./UnitConfigJson";
+import TilesourceConfigJson from "./TilesourceConfigJson";
 
 /**
  * Defines the entire theme.
@@ -15,7 +15,7 @@ import UnitConfigJson from "./UnitConfigJson";
  * General remark: a type (string | any) indicates either a fixed or a translatable string.
  */
 export interface LayoutConfigJson {
-
+   
     /**
      * The id of this layout.
      *
@@ -36,10 +36,7 @@ export interface LayoutConfigJson {
      * Who does maintian this preset?
      */
     maintainer: string;
-    /**
-     * Extra piece of text that can be added to the changeset
-     */
-    changesetmessage?: string;
+
     /**
      * A version number, either semantically or by date.
      * Should be sortable, where the higher value is the later version
@@ -108,7 +105,20 @@ export interface LayoutConfigJson {
      * IF widenfactor is 1, this feature is disabled. A recommended value is between 1 and 3
      */
     widenFactor?: number;
+    /**
+     * At low zoom levels, overpass is used to query features.
+     * At high zoom level, the OSM api is used to fetch one or more BBOX aligning with a slippy tile.
+     * The overpassMaxZoom controls the flipoverpoint: if the zoom is this or lower, overpass is used.
+     */
+    overpassMaxZoom?: 17 | number
 
+    /**
+     * When the OSM-api is used to fetch features, it does so in a tiled fashion.
+     * These tiles are using a ceratin zoom level, that can be controlled here
+     * Default: overpassMaxZoom + 1
+     */
+    osmApiTileSize?: number
+    
     /**
      * A tagrendering depicts how to show some tags or how to show a question for it.
      *
@@ -158,6 +168,11 @@ export interface LayoutConfigJson {
      * The id of the default background. BY default: vanilla OSM
      */
     defaultBackgroundId?: string;
+
+    /**
+     * Define some (overlay) slippy map tilesources
+     */
+    tileLayerSources?: TilesourceConfigJson[]
 
     /**
      * The number of seconds that a feature is allowed to stay in the cache.
@@ -253,7 +268,7 @@ export interface LayoutConfigJson {
      * If set to [[lat0, lon0], [lat1, lon1]], the map will not scroll outside of those bounds.
      * Off by default, which will enable panning to the entire world
      */
-    lockLocation?: boolean | [[number, number], [number, number]];
+    lockLocation?: boolean | [[number, number], [number, number]] | number[][];
 
     enableUserBadge?: boolean;
     enableShareScreen?: boolean;
@@ -266,6 +281,7 @@ export interface LayoutConfigJson {
     enableShowAllQuestions?: boolean;
     enableDownload?: boolean;
     enablePdfDownload?: boolean;
+    enableIframePopout?: true | boolean;
 
     /**
      * Set one or more overpass URLs to use for this theme..

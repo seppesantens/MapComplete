@@ -14,16 +14,23 @@ interface SplitInfo {
 export default class SplitAction extends OsmChangeAction {
     private readonly wayId: string;
     private readonly _splitPointsCoordinates: [number, number] []// lon, lat
+    private _meta: { theme: string, changeType: "split" };
+    private _toleranceInMeters: number;
 
     /**
-     * 
+     * Create a changedescription for splitting a point.
+     * Will attempt to reuse existing points
      * @param wayId
      * @param splitPointCoordinates: lon, lat
+     * @param meta
+     * @param toleranceInMeters: if a splitpoint closer then this amount of meters to an existing point, the existing point will be used to split the line instead of a new point
      */
-    constructor(wayId: string, splitPointCoordinates: [number, number][]) {
+    constructor(wayId: string, splitPointCoordinates: [number, number][], meta: {theme: string},  toleranceInMeters = 5) {
         super()
         this.wayId = wayId;
         this._splitPointsCoordinates = splitPointCoordinates
+        this._toleranceInMeters = toleranceInMeters;
+        this._meta = {...meta, changeType: "split"};
     }
 
     private static SegmentSplitInfo(splitInfo: SplitInfo[]): SplitInfo[][] {
@@ -48,7 +55,7 @@ export default class SplitAction extends OsmChangeAction {
         const originalNodes = originalElement.nodes;
 
         // First, calculate splitpoints and remove points close to one another
-        const splitInfo = this.CalculateSplitCoordinates(originalElement)
+        const splitInfo = this.CalculateSplitCoordinates(originalElement, this._toleranceInMeters)
         // Now we have a list with e.g. 
         // [ { originalIndex: 0}, {originalIndex: 1, doSplit: true}, {originalIndex: 2}, {originalIndex: undefined, doSplit: true}, {originalIndex: 3}]
 
@@ -89,7 +96,8 @@ export default class SplitAction extends OsmChangeAction {
                 changes: {
                     lon: element.lngLat[0],
                     lat: element.lngLat[1]
-                }
+                },
+                meta: this._meta
             })
         }
 
@@ -110,7 +118,8 @@ export default class SplitAction extends OsmChangeAction {
                     changes: {
                         coordinates: wayPart.map(p => p.lngLat),
                         nodes: nodeIds
-                    }
+                    },
+                    meta: this._meta
                 })
                 allWayIdsInOrder.push(originalElement.id)
                 allWaysNodesInOrder.push(nodeIds)
@@ -135,7 +144,8 @@ export default class SplitAction extends OsmChangeAction {
                     changes: {
                         coordinates: wayPart.map(p => p.lngLat),
                         nodes: nodeIds
-                    }
+                    },
+                    meta: this._meta
                 })
 
                 allWayIdsInOrder.push(id)
@@ -152,8 +162,8 @@ export default class SplitAction extends OsmChangeAction {
                 allWayIdsInOrder: allWayIdsInOrder,
                 originalNodes: originalNodes,
                 allWaysNodesInOrder: allWaysNodesInOrder,
-                originalWayId: originalElement.id
-            }).CreateChangeDescriptions(changes)
+                originalWayId: originalElement.id,
+            }, this._meta.theme).CreateChangeDescriptions(changes)
             changeDescription.push(...changDescrs)
         }
 
@@ -224,23 +234,24 @@ export default class SplitAction extends OsmChangeAction {
                 // We keep the original points
                 continue
             }
-            if (point.dist * 1000 >= toleranceInM) {
-                // No need to remove this one
-                continue
-            }
-
+         
             // At this point, 'dist' told us the point is pretty close to an already existing point.
             // Lets see which (already existing) point is closer and mark it as splitpoint
             const nextPoint = allPoints[i + 1]
             const prevPoint = allPoints[i - 1]
             const distToNext = nextPoint.location - point.location
-            const distToPrev = prevPoint.location - point.location
+            const distToPrev = point.location - prevPoint.location
+            
+            if(distToNext * 1000 > toleranceInM && distToPrev * 1000 > toleranceInM){
+                // Both are too far away to mark them as the split point
+                continue;
+            }
+            
             let closest = nextPoint
             if (distToNext > distToPrev) {
                 closest = prevPoint
             }
             // Ok, we have a closest point!
-            
             if(closest.originalIndex === 0 || closest.originalIndex === originalPoints.length){
                 // We can not split on the first or last points...
                 continue

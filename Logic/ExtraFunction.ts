@@ -5,8 +5,6 @@ import State from "../State";
 import BaseUIElement from "../UI/BaseUIElement";
 import List from "../UI/Base/List";
 import Title from "../UI/Base/Title";
-import {UIEventSourceTools} from "./UIEventSource";
-import AspectedRouting from "./Osm/aspectedRouting";
 import {BBox} from "./BBox";
 
 export interface ExtraFuncParams {
@@ -119,7 +117,7 @@ export class ExtraFunction {
         {
             name: "closest",
             doc: "Given either a list of geojson features or a single layer name, gives the single object which is nearest to the feature. In the case of ways/polygons, only the centerpoint is considered. Returns a single geojson feature or undefined if nothing is found (or not yet laoded)",
-            args: ["list of features"]
+            args: ["list of features or a layer name or '*' to get all features"]
         },
         (params, feature) => {
             return (features) => ExtraFunction.GetClosestNFeatures(params, feature, features)?.[0]?.feat
@@ -132,7 +130,7 @@ export class ExtraFunction {
             doc: "Given either a list of geojson features or a single layer name, gives the n closest objects which are nearest to the feature (excluding the feature itself). In the case of ways/polygons, only the centerpoint is considered. " +
                 "Returns a list of `{feat: geojson, distance:number}` the empty list if nothing is found (or not yet loaded)\n\n" +
                 "If a 'unique tag key' is given, the tag with this key will only appear once (e.g. if 'name' is given, all features will have a different name)",
-            args: ["list of features or layer name", "amount of features", "unique tag key (optional)", "maxDistanceInMeters (optional)"]
+            args: ["list of features or layer name or '*' to get all features", "amount of features", "unique tag key (optional)", "maxDistanceInMeters (optional)"]
         },
         (params, feature) => {
 

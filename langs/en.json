@@ -10,7 +10,8 @@
         "ccb": "under the CC-BY-license",
         "uploadFailed": "Could not upload your picture. Are you connected to the Internet, and allow third party API's? The Brave browser or the uMatrix plugin might block them.",
         "respectPrivacy": "Do not photograph people nor license plates. Do not upload Google Maps, Google Streetview or other copyrighted sources.",
-        "uploadDone": "<span class='thanks'>Your picture has been added. Thanks for helping out!</span>",
+        "uploadDone": "Your picture has been added. Thanks for helping out!",
+        "uploadMultipleDone": "{count} pictures have been added. Thanks for helping out!",
         "dontDelete": "Cancel",
         "doDelete": "Remove image",
         "isDeleted": "Deleted",
@@ -25,7 +26,8 @@
     "index": {
         "#": "These texts are shown above the theme buttons when no theme is loaded",
         "title": "Welcome to MapComplete",
-        "intro": "MapComplete is an OpenStreetMap-viewer and editor, which shows you information about a specific theme.",
+        "featuredThemeTitle": "Featured this week",
+        "intro": "MapComplete is an OpenStreetMap-viewer and editor, which shows you information about features of a specific theme and allows to update it.",
         "pickTheme": "Pick a theme below to get started."
     },
     "split": {
@@ -40,6 +42,7 @@
         "delete": "Delete",
         "cancel": "Cancel",
         "isDeleted": "This feature is deleted",
+        "cannotBeDeleted": "This feature can not be deleted",
         "loginToDelete": "You must be logged in to delete a point",
         "safeDelete": "This point can be safely deleted.",
         "isntAPoint": "Only points can be deleted, the selected feature is a way, area or relation.",
@@ -52,7 +55,8 @@
         "reasons": {
             "test": "This was a testing point - the feature was never actually there",
             "disused": "This feature is disused or removed",
-            "notFound": "This feature couldn't be found"
+            "notFound": "This feature couldn't be found",
+            "duplicate": "This point is a duplicate of another feature"
         },
         "explanations": {
             "selectReason": "Please, select why this feature should be deleted",
@@ -122,7 +126,9 @@
             "intro": "<h3>More thematic maps?</h3>Do you enjoy collecting geodata? <br/>There are more themes available.",
             "requestATheme": "If you want a custom-built theme, request it in the issue tracker",
             "streetcomplete": "Another, similar application is <a href='https://play.google.com/store/apps/details?id=de.westnordost.streetcomplete' class='underline hover:text-blue-800' class='underline hover:text-blue-800' target='_blank'>StreetComplete</a>.",
-            "createYourOwnTheme": "Create your own MapComplete theme from scratch"
+            "createYourOwnTheme": "Create your own MapComplete theme from scratch",
+            "previouslyHiddenTitle": "Previously visited hidden themes",
+            "hiddenExplanation": "These themes are only visible if you know the link. You have discovered {hidden_discovered} out of {total_hidden} hidden themes"
         },
         "sharescreen": {
             "intro": "<h3>Share this map</h3> Share this map by copying the link below and sending it to friends and family:",
@@ -221,9 +227,13 @@
         },
         "wikipedia": {
             "wikipediaboxTitle": "Wikipedia",
-            "failed":"Loading the wikipedia entry failed",
+            "failed": "Loading the wikipedia entry failed",
             "loading": "Loading Wikipedia...",
-            "noWikipediaPage": "This wikidata item has no corresponding wikipedia page yet."
+            "noWikipediaPage": "This wikidata item has no corresponding wikipedia page yet.",
+            "searchWikidata": "Search on wikidata",
+            "noResults": "Nothing found for <i>{search}</i>",
+            "doSearch": "Search above to see results",
+            "createNewWikidata": "Create a new wikidata item"
         }
     },
     "favourite": {
@@ -246,5 +256,33 @@
         "tos": "If you create a review, you agree to <a href='https://mangrove.reviews/terms' target='_blank'>the TOS and privacy policy of Mangrove.reviews</a>",
         "attribution": "Reviews are powered by <a href='https://mangrove.reviews/' target='_blank'>Mangrove Reviews</a> and are available under <a href='https://mangrove.reviews/terms#8-licensing-of-content' target='_blank'>CC-BY 4.0</a>.",
         "plz_login": "Login to leave a review"
+    },
+    "multi_apply": {
+        "autoApply": "When changing the attributes {attr_names}, these attributes will automatically be changed on {count} other objects too"
+    },
+    "move": {
+        "loginToMove": "You must be logged in to move a point",
+        "inviteToMoveAgain": "Move this point again",
+        "moveTitle": "Move this point",
+        "whyMove": "Why do you want to move this point?",
+        "confirmMove": "Move here",
+        "pointIsMoved": "The point has been moved",
+        "zoomInFurther": "Zoom in further to confirm this move",
+        "selectReason": "Why do you move this object?",
+        "reasons": {
+            "reasonRelocation": "The object has been relocated to a totally different location",
+            "reasonInaccurate": "The location of this object is inaccurate and should be moved a few meter"
+        },
+        "inviteToMove": {
+            "generic": "Move this point",
+            "reasonInaccurate": "Improve the accuracy of this point",
+            "reasonRelocation": "Move this object to a another place because it has relocated"
+        },
+        "cannotBeMoved": "This feature cannot be moved.",
+        "isWay": "This feature is a way. Use another OpenStreetMap editor to move it.",
+        "isRelation": "This feature is a relation and can not be moved",
+        "partOfAWay": "This feature is part of another way. Use another editor to move it",
+        "partOfRelation": "This feature is part of a relation. Use another editor to move it",
+        "cancel": "Cancel move"
     }
 }

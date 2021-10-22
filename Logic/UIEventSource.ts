@@ -75,6 +75,27 @@ export class UIEventSource<T> {
         promise?.catch(err => console.warn("Promise failed:", err))
         return src
     }
+    
+    public AsPromise(): Promise<T>{
+        const self = this;
+        return new Promise((resolve, reject) => {
+            if(self.data !== undefined){
+                resolve(self.data)
+            }else{
+                self.addCallbackD(data => {
+                    resolve(data)
+                    return true; // return true to unregister as we only need to be called once
+                })
+            }
+        })
+    }
+
+    public WaitForPromise(promise: Promise<T>, onFail: ((any) => void)): UIEventSource<T> {
+        const self = this;
+        promise?.then(d => self.setData(d))
+        promise?.catch(err =>onFail(err))
+        return this
+    }
 
     /**
      * Converts a promise into a UIVentsource, sets the UIEVentSource when the result is calculated.
@@ -115,7 +136,7 @@ export class UIEventSource<T> {
             if (oldList === list) {
                 return;
             }
-            if (oldList.length !== list.length) {
+            if (oldList === undefined || oldList.length !== list.length) {
                 stable.setData(list);
                 return;
             }
@@ -195,16 +216,20 @@ export class UIEventSource<T> {
         const sink = new UIEventSource<X>(undefined)
         const seenEventSources = new Set<UIEventSource<X>>();
         mapped.addCallbackAndRun(newEventSource => {
-            
-            if (newEventSource === undefined) {
+            if (newEventSource === null) {
+                sink.setData(null)
+            } else if (newEventSource === undefined) {
                 sink.setData(undefined)
-            } else if (!seenEventSources.has(newEventSource)) {
+            }else if (!seenEventSources.has(newEventSource)) {
                 seenEventSources.add(newEventSource)
                 newEventSource.addCallbackAndRun(resultData => {
                     if (mapped.data === newEventSource) {
                         sink.setData(resultData);
                     }
                 })
+            }else{
+                // Already seen, so we don't have to add a callback, just update the value
+                sink.setData(newEventSource.data)
             }
         })
 
@@ -261,6 +286,9 @@ export class UIEventSource<T> {
     }
 
     public stabilized(millisToStabilize): UIEventSource<T> {
+        if(Utils.runningFromConsole){
+            return this;
+        }
 
         const newSource = new UIEventSource<T>(this.data);
 
@@ -293,21 +321,20 @@ export class UIEventSource<T> {
             }
         })
     }
-}
 
-export class UIEventSourceTools {
-
-    private static readonly _download_cache = new Map<string, UIEventSource<any>>()
-
-    public static downloadJsonCached(url: string): UIEventSource<any> {
-        const cached = UIEventSourceTools._download_cache.get(url)
-        if (cached !== undefined) {
-            return cached;
-        }
-        const src = new UIEventSource<any>(undefined)
-        UIEventSourceTools._download_cache.set(url, src)
-        Utils.downloadJson(url).then(r => src.setData(r))
-        return src;
+    public static asFloat(source: UIEventSource<string>): UIEventSource<number> {
+        return source.map(
+            (str) => {
+                let parsed = parseFloat(str);
+                return isNaN(parsed) ? undefined : parsed;
+            },
+            [],
+            (fl) => {
+                if (fl === undefined || isNaN(fl)) {
+                    return undefined;
+                }
+                return ("" + fl).substr(0, 8);
+            }
+        )
     }
-
 }

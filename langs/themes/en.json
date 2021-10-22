@@ -5,81 +5,6 @@
     },
     "artwork": {
         "description": "Welcome to Open Artwork Map, a map of statues, busts, grafittis and other artwork all over the world",
-        "layers": {
-            "0": {
-                "description": "Diverse pieces of artwork",
-                "name": "Artworks",
-                "presets": {
-                    "0": {
-                        "title": "Artwork"
-                    }
-                },
-                "tagRenderings": {
-                    "artwork-artist_name": {
-                        "question": "Which artist created this?",
-                        "render": "Created by {artist_name}"
-                    },
-                    "artwork-artwork_type": {
-                        "mappings": {
-                            "0": {
-                                "then": "Architecture"
-                            },
-                            "1": {
-                                "then": "Mural"
-                            },
-                            "2": {
-                                "then": "Painting"
-                            },
-                            "3": {
-                                "then": "Sculpture"
-                            },
-                            "4": {
-                                "then": "Statue"
-                            },
-                            "5": {
-                                "then": "Bust"
-                            },
-                            "6": {
-                                "then": "Stone"
-                            },
-                            "7": {
-                                "then": "Installation"
-                            },
-                            "8": {
-                                "then": "Graffiti"
-                            },
-                            "9": {
-                                "then": "Relief"
-                            },
-                            "10": {
-                                "then": "Azulejo (Spanish decorative tilework)"
-                            },
-                            "11": {
-                                "then": "Tilework"
-                            }
-                        },
-                        "question": "What is the type of this artwork?",
-                        "render": "This is a {artwork_type}"
-                    },
-                    "artwork-website": {
-                        "question": "Is there a website with more information about this artwork?",
-                        "render": "More information on <a href='{website}' target='_blank'>this website</a>"
-                    },
-                    "artwork-wikidata": {
-                        "question": "Which Wikidata-entry corresponds with <b>this artwork</b>?",
-                        "render": "Corresponds with <a href='https://www.wikidata.org/wiki/{wikidata}' target='_blank'>{wikidata}</a>"
-                    }
-                },
-                "title": {
-                    "mappings": {
-                        "0": {
-                            "then": "Artwork <i>{name}</i>"
-                        }
-                    },
-                    "render": "Artwork"
-                }
-            }
-        },
         "title": "Open Artwork Map"
     },
     "benches": {
@@ -308,21 +233,23 @@
                 }
             }
         },
-        "roamingRenderings": {
-            "0": {
-                "question": "Who operates this place?",
-                "render": "This place is operated by {operator}"
-            },
-            "1": {
-                "mappings": {
-                    "0": {
-                        "then": "This place has a power supply"
-                    },
-                    "1": {
-                        "then": "This place does not have power supply"
-                    }
+        "overrideAll": {
+            "tagRenderings+": {
+                "0": {
+                    "question": "Who operates this place?",
+                    "render": "This place is operated by {operator}"
                 },
-                "question": "Does this place have a power supply?"
+                "1": {
+                    "mappings": {
+                        "0": {
+                            "then": "This place has a power supply"
+                        },
+                        "1": {
+                            "then": "This place does not have power supply"
+                        }
+                    },
+                    "question": "Does this place have a power supply?"
+                }
             }
         },
         "shortDescription": "Find sites to spend the night with your camper",
@@ -527,6 +454,129 @@
             }
         },
         "overrideAll": {
+            "tagRenderings+": {
+                "0": {
+                    "question": "Is there a (unofficial) website with more informations (e.g. topos)?"
+                },
+                "1": {
+                    "mappings": {
+                        "0": {
+                            "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that this is</span> publicly accessible<br/>{_embedding_feature:access:description}"
+                        },
+                        "1": {
+                            "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that </span> a permit is needed to access<br/>{_embedding_feature:access:description}"
+                        },
+                        "2": {
+                            "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that this is</span> only accessible to customers<br/>{_embedding_feature:access:description}"
+                        },
+                        "3": {
+                            "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that this is</span> only accessible to club members<br/>{_embedding_feature:access:description}"
+                        }
+                    }
+                },
+                "2": {
+                    "mappings": {
+                        "0": {
+                            "then": "Publicly accessible to anyone"
+                        },
+                        "1": {
+                            "then": "You need a permit to access here"
+                        },
+                        "2": {
+                            "then": "Only custumers"
+                        },
+                        "3": {
+                            "then": "Only club members"
+                        }
+                    },
+                    "question": "Who can access here?"
+                },
+                "4": {
+                    "question": "What is the (average) length of the routes in meters?",
+                    "render": "The routes are <b>{canonical(climbing:length)}</b> long on average"
+                },
+                "5": {
+                    "question": "What is the level of the easiest route here, accoring to the french classification system?",
+                    "render": "The minimal difficulty is {climbing:grade:french:min} according to the french/belgian system"
+                },
+                "6": {
+                    "question": "What is the level of the most difficult route here, accoring to the french classification system?",
+                    "render": "The maximal difficulty is {climbing:grade:french:max} according to the french/belgian system"
+                },
+                "7": {
+                    "mappings": {
+                        "0": {
+                            "then": "Bouldering is possible here"
+                        },
+                        "1": {
+                            "then": "Bouldering is not possible here"
+                        },
+                        "2": {
+                            "then": "Bouldering is possible, allthough there are only a few routes"
+                        },
+                        "3": {
+                            "then": "There are {climbing:boulder} boulder routes"
+                        }
+                    },
+                    "question": "Is bouldering possible here?"
+                },
+                "8": {
+                    "mappings": {
+                        "0": {
+                            "then": "Toprope climbing is possible here"
+                        },
+                        "1": {
+                            "then": "Toprope climbing is not possible here"
+                        },
+                        "2": {
+                            "then": "There are {climbing:toprope} toprope routes"
+                        }
+                    },
+                    "question": "Is toprope climbing possible here?"
+                },
+                "9": {
+                    "mappings": {
+                        "0": {
+                            "then": "Sport climbing is possible here"
+                        },
+                        "1": {
+                            "then": "Sport climbing is not possible here"
+                        },
+                        "2": {
+                            "then": "There are {climbing:sport} sport climbing routes"
+                        }
+                    },
+                    "question": "Is sport climbing possible here on fixed anchors?"
+                },
+                "10": {
+                    "mappings": {
+                        "0": {
+                            "then": "Traditional climbing is possible here"
+                        },
+                        "1": {
+                            "then": "Traditional climbing is not possible here"
+                        },
+                        "2": {
+                            "then": "There are {climbing:traditional} traditional climbing routes"
+                        }
+                    },
+                    "question": "Is traditional climbing possible here (using own gear e.g. chocks)?"
+                },
+                "11": {
+                    "mappings": {
+                        "0": {
+                            "then": "There is a speed climbing wall"
+                        },
+                        "1": {
+                            "then": "There is no speed climbing wall"
+                        },
+                        "2": {
+                            "then": "There are {climbing:speed} speed climbing walls"
+                        }
+                    },
+                    "question": "Is there a speed climbing wall?"
+                }
+            },
             "units+": {
                 "0": {
                     "applicableUnits": {
@@ -538,129 +588,6 @@
                         }
                     }
                 }
-            }
-        },
-        "roamingRenderings": {
-            "0": {
-                "question": "Is there a (unofficial) website with more informations (e.g. topos)?"
-            },
-            "1": {
-                "mappings": {
-                    "0": {
-                        "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that this is</span> publicly accessible<br/>{_embedding_feature:access:description}"
-                    },
-                    "1": {
-                        "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that </span> a permit is needed to access<br/>{_embedding_feature:access:description}"
-                    },
-                    "2": {
-                        "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that this is</span> only accessible to customers<br/>{_embedding_feature:access:description}"
-                    },
-                    "3": {
-                        "then": "<span class='subtle'>The <a href='#{_embedding_feature:id}'>containing feature</a> states that this is</span> only accessible to club members<br/>{_embedding_feature:access:description}"
-                    }
-                }
-            },
-            "2": {
-                "mappings": {
-                    "0": {
-                        "then": "Publicly accessible to anyone"
-                    },
-                    "1": {
-                        "then": "You need a permit to access here"
-                    },
-                    "2": {
-                        "then": "Only custumers"
-                    },
-                    "3": {
-                        "then": "Only club members"
-                    }
-                },
-                "question": "Who can access here?"
-            },
-            "4": {
-                "question": "What is the (average) length of the routes in meters?",
-                "render": "The routes are <b>{canonical(climbing:length)}</b> long on average"
-            },
-            "5": {
-                "question": "What is the level of the easiest route here, accoring to the french classification system?",
-                "render": "The minimal difficulty is {climbing:grade:french:min} according to the french/belgian system"
-            },
-            "6": {
-                "question": "What is the level of the most difficult route here, accoring to the french classification system?",
-                "render": "The maximal difficulty is {climbing:grade:french:max} according to the french/belgian system"
-            },
-            "7": {
-                "mappings": {
-                    "0": {
-                        "then": "Bouldering is possible here"
-                    },
-                    "1": {
-                        "then": "Bouldering is not possible here"
-                    },
-                    "2": {
-                        "then": "Bouldering is possible, allthough there are only a few routes"
-                    },
-                    "3": {
-                        "then": "There are {climbing:boulder} boulder routes"
-                    }
-                },
-                "question": "Is bouldering possible here?"
-            },
-            "8": {
-                "mappings": {
-                    "0": {
-                        "then": "Toprope climbing is possible here"
-                    },
-                    "1": {
-                        "then": "Toprope climbing is not possible here"
-                    },
-                    "2": {
-                        "then": "There are {climbing:toprope} toprope routes"
-                    }
-                },
-                "question": "Is toprope climbing possible here?"
-            },
-            "9": {
-                "mappings": {
-                    "0": {
-                        "then": "Sport climbing is possible here"
-                    },
-                    "1": {
-                        "then": "Sport climbing is not possible here"
-                    },
-                    "2": {
-                        "then": "There are {climbing:sport} sport climbing routes"
-                    }
-                },
-                "question": "Is sport climbing possible here on fixed anchors?"
-            },
-            "10": {
-                "mappings": {
-                    "0": {
-                        "then": "Traditional climbing is possible here"
-                    },
-                    "1": {
-                        "then": "Traditional climbing is not possible here"
-                    },
-                    "2": {
-                        "then": "There are {climbing:traditional} traditional climbing routes"
-                    }
-                },
-                "question": "Is traditional climbing possible here (using own gear e.g. chocks)?"
-            },
-            "11": {
-                "mappings": {
-                    "0": {
-                        "then": "There is a speed climbing wall"
-                    },
-                    "1": {
-                        "then": "There is no speed climbing wall"
-                    },
-                    "2": {
-                        "then": "There are {climbing:speed} speed climbing walls"
-                    }
-                },
-                "question": "Is there a speed climbing wall?"
             }
         },
         "title": "Open Climbing Map"
@@ -709,27 +636,29 @@
                 }
             }
         },
-        "roamingRenderings": {
-            "0": {
-                "mappings": {
-                    "0": {
-                        "then": "This street is a cyclestreet (and has a speed limit of 30 km/h)"
+        "overrideAll": {
+            "tagRenderings+": {
+                "0": {
+                    "mappings": {
+                        "0": {
+                            "then": "This street is a cyclestreet (and has a speed limit of 30 km/h)"
+                        },
+                        "1": {
+                            "then": "This street is a cyclestreet"
+                        },
+                        "2": {
+                            "then": "This street will become a cyclstreet soon"
+                        },
+                        "3": {
+                            "then": "This street is not a cyclestreet"
+                        }
                     },
-                    "1": {
-                        "then": "This street is a cyclestreet"
-                    },
-                    "2": {
-                        "then": "This street will become a cyclstreet soon"
-                    },
-                    "3": {
-                        "then": "This street is not a cyclestreet"
-                    }
+                    "question": "Is this street a cyclestreet?"
                 },
-                "question": "Is this street a cyclestreet?"
-            },
-            "1": {
-                "question": "When will this street become a cyclestreet?",
-                "render": "This street will become a cyclestreet at {cyclestreet:start_date}"
+                "1": {
+                    "question": "When will this street become a cyclestreet?",
+                    "render": "This street will become a cyclestreet at {cyclestreet:start_date}"
+                }
             }
         },
         "shortDescription": "A map of cyclestreets",
@@ -744,15 +673,16 @@
         "title": "Drinking Water"
     },
     "etymology": {
-        "description": "On this map, you can see what an object is named after. The streets, buildings, ... come from OpenStreetMap which got linked with Wikidata. The information comes from Wpikipedia.",
+        "description": "On this map, you can see what an object is named after. The streets, buildings, ... come from OpenStreetMap which got linked with Wikidata. In the popup, you'll see the Wikipedia article (if it exists) or a wikidata box of what the object is named after. If the object itself has a wikipedia page, that'll be shown too.<br/><br/><b>You can help contribute too!</b>Zoom in enough and <i>all</i> streets will show up. You can click one and a Wikidata-search box will popup. With a few clicks, you can add an etymology link. Note that you need a free OpenStreetMap account to do this.",
         "layers": {
-            "0": {
-                "description": "All objects which have an etymology known",
-                "name": "Has etymolgy",
-                "tagRenderings": {
-                    "simple etymology": {
-                        "render": "Named after {name:etymology}"
-                    }
+            "1": {
+                "override": {
+                    "name": "Streets without etymology information"
+                }
+            },
+            "2": {
+                "override": {
+                    "name": "Parks and forests without etymology information"
                 }
             }
         },
@@ -1293,77 +1223,6 @@
     },
     "shops": {
         "description": "On this map, one can mark basic information about shops, add opening hours and phone numbers",
-        "layers": {
-            "0": {
-                "description": "A shop",
-                "name": "Shop",
-                "presets": {
-                    "0": {
-                        "description": "Add a new shop",
-                        "title": "Shop"
-                    }
-                },
-                "tagRenderings": {
-                    "shops-email": {
-                        "question": "What is the email address of this shop?",
-                        "render": "<a href='mailto:{email}'>{email}</a>"
-                    },
-                    "shops-name": {
-                        "question": "What is the name of this shop?"
-                    },
-                    "shops-opening_hours": {
-                        "question": "What are the opening hours of this shop?",
-                        "render": "{opening_hours_table(opening_hours)}"
-                    },
-                    "shops-phone": {
-                        "question": "What is the phone number?",
-                        "render": "<a href='tel:{phone}'>{phone}</a>"
-                    },
-                    "shops-shop": {
-                        "mappings": {
-                            "0": {
-                                "then": "Convenience store"
-                            },
-                            "1": {
-                                "then": "Supermarket"
-                            },
-                            "2": {
-                                "then": "Clothing store"
-                            },
-                            "3": {
-                                "then": "Hairdresser"
-                            },
-                            "4": {
-                                "then": "Bakery"
-                            },
-                            "5": {
-                                "then": "Car repair (garage)"
-                            },
-                            "6": {
-                                "then": "Car dealer"
-                            }
-                        },
-                        "question": "What does this shop sell?",
-                        "render": "This shop sells {shop}"
-                    },
-                    "shops-website": {
-                        "question": "What is the website of this shop?",
-                        "render": "<a href='{website}'>{website}</a>"
-                    }
-                },
-                "title": {
-                    "mappings": {
-                        "0": {
-                            "then": "{name}"
-                        },
-                        "1": {
-                            "then": "{shop}"
-                        }
-                    },
-                    "render": "Shop"
-                }
-            }
-        },
         "shortDescription": "An editable map with basic shop information",
         "title": "Open Shop Map"
     },
@@ -1416,6 +1275,11 @@
             }
         },
         "shortDescription": "Help to build an open dataset of UK addresses",
+        "tileLayerSources": {
+            "0": {
+                "name": "Property boundaries by osmuk.org"
+            }
+        },
         "title": "UK Addresses"
     },
     "waste_basket": {

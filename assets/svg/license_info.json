@@ -506,6 +506,14 @@
     ]
   },
   {
+    "path": "delete_not_allowed.svg",
+    "license": "CC0",
+    "authors": [
+      "Pieter Vander Vennet"
+    ],
+    "sources": []
+  },
+  {
     "path": "direction.svg",
     "license": "CC0; trivial",
     "authors": [],
@@ -670,6 +678,90 @@
     "license": "CC0; trivial",
     "authors": [],
     "sources": []
+  },
+  {
+    "path": "gender_bi.svg",
+    "license": "CC0",
+    "authors": [
+      "Gender Icon Pack"
+    ],
+    "sources": [
+      "https://www.iconpacks.net/free-icon-pack/gender-107.html"
+    ]
+  },
+  {
+    "path": "gender_female.svg",
+    "license": "CC0",
+    "authors": [],
+    "sources": []
+  },
+  {
+    "path": "gender_female.svg",
+    "license": "CC0",
+    "authors": [
+      "Gender Icon Pack"
+    ],
+    "sources": [
+      "https://www.iconpacks.net/free-icon-pack/gender-107.html"
+    ]
+  },
+  {
+    "path": "gender_inter.svg",
+    "license": "CC0",
+    "authors": [
+      "Gender Icon Pack"
+    ],
+    "sources": [
+      "https://www.iconpacks.net/free-icon-pack/gender-107.html"
+    ]
+  },
+  {
+    "path": "gender_intersekse.svg",
+    "license": "CC0",
+    "authors": [],
+    "sources": []
+  },
+  {
+    "path": "gender_male.svg",
+    "license": "CC0",
+    "authors": [],
+    "sources": []
+  },
+  {
+    "path": "gender_male.svg",
+    "license": "CC0",
+    "authors": [
+      "Gender Icon Pack"
+    ],
+    "sources": [
+      "https://www.iconpacks.net/free-icon-pack/gender-107.html"
+    ]
+  },
+  {
+    "path": "gender_queer.svg",
+    "license": "CC0",
+    "authors": [
+      "Gender Icon Pack"
+    ],
+    "sources": [
+      "https://www.iconpacks.net/free-icon-pack/gender-107.html"
+    ]
+  },
+  {
+    "path": "gender_trans.svg",
+    "license": "CC0",
+    "authors": [],
+    "sources": []
+  },
+  {
+    "path": "gender_trans.svg",
+    "license": "CC0",
+    "authors": [
+      "Gender Icon Pack"
+    ],
+    "sources": [
+      "https://www.iconpacks.net/free-icon-pack/gender-107.html"
+    ]
   },
   {
     "path": "hand.svg",
@@ -956,6 +1048,32 @@
     "sources": []
   },
   {
+    "path": "move.svg",
+    "license": "CC-BY-SA 3.0 Unported",
+    "authors": [
+      "MGalloway (WMF)"
+    ],
+    "sources": [
+      "https://commons.wikimedia.org/wiki/File:Move_icon.svg"
+    ]
+  },
+  {
+    "path": "move_confirm.svg",
+    "license": "CC0",
+    "authors": [
+      "Pieter Vander Vennet"
+    ],
+    "sources": []
+  },
+  {
+    "path": "move_not_allowed.svg",
+    "license": "CC0",
+    "authors": [
+      "Pieter Vander Vennet"
+    ],
+    "sources": []
+  },
+  {
     "path": "no_checkmark.svg",
     "license": "CC0; trivial",
     "authors": [],
@@ -1135,6 +1253,14 @@
     "path": "reload.svg",
     "license": "CC0; trivial",
     "authors": [],
+    "sources": []
+  },
+  {
+    "path": "relocation.svg",
+    "license": "CC0",
+    "authors": [
+      "Pieter Vander Vennet"
+    ],
     "sources": []
   },
   {

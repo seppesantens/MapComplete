@@ -1,26 +1,13 @@
-import FeatureInfoBox from "./UI/Popup/FeatureInfoBox";
-import {UIEventSource} from "./Logic/UIEventSource";
-import AllKnownLayers from "./Customizations/AllKnownLayers";
-import State from "./State";
-import {AllKnownLayouts} from "./Customizations/AllKnownLayouts";
+import * as wd from "wikidata-sdk"
+import * as wds from "wikibase-sdk"
+import {Utils} from "./Utils";
 
-State.state = new State(AllKnownLayouts.allKnownLayouts.get("charging_stations"))
-State.state.changes.pendingChanges.setData([])
-const geojson = {
-    type: "Feature",
-    geometry: {
-        type: "Point",
-        coordinates: [51.0, 4]
-    },
-    properties:
-        {
-            id: "node/42",
-            amenity: "charging_station",
-        }
-}
-State.state.allElements.addOrGetElement(geojson)
-const tags = State.state.allElements.getEventSourceById("node/42")
-new FeatureInfoBox(
-    tags,
-    AllKnownLayers.sharedLayers.get("charging_station")
-).AttachTo("maindiv")
+const url = wd.getEntities(["Q42"])
+console.log(url)
+Utils.downloadJson(url).then(async (entities) => {
+    //const parsed = wd.parse.wb.entities(entities)["Q42"]
+    console.log(entities)
+    console.log(wds.simplify.entity(entities.entities["Q42"], {
+        timeConverter: 'simple-day'
+    }))
+})

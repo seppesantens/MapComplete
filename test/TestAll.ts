@@ -11,6 +11,8 @@ import SplitActionSpec from "./SplitAction.spec";
 import {Utils} from "../Utils";
 import TileFreshnessCalculatorSpec from "./TileFreshnessCalculator.spec";
 import WikidataSpecTest from "./Wikidata.spec.test";
+import ImageProviderSpec from "./ImageProvider.spec";
+import ActorsSpec from "./Actors.spec";
 
 
 ScriptUtils.fixUtils()
@@ -25,7 +27,9 @@ const allTests = [
     new RelationSplitHandlerSpec(),
     new SplitActionSpec(),
     new TileFreshnessCalculatorSpec(),
-    new WikidataSpecTest()
+    new WikidataSpecTest(),
+    new ImageProviderSpec(),
+    new ActorsSpec()
 ]
 
 Utils.externalDownloadFunction = async (url) => {
@@ -44,16 +48,17 @@ args = args.map(a => a.toLowerCase())
 const allFailures: { testsuite: string, name: string, msg: string } [] = []
 let testsToRun = allTests
 if (args.length > 0) {
-    testsToRun = allTests.filter(t => args.indexOf(t.name) >= 0)
+    args = args.map(a => a.toLowerCase())
+    testsToRun = allTests.filter(t => args.indexOf(t.name.toLowerCase()) >= 0)
 }
 
 if (testsToRun.length == 0) {
-    throw "No tests found"
+    throw "No tests found. Try one of "+allTests.map(t => t.name).join(", ")
 }
 
 for (let i = 0; i < testsToRun.length; i++) {
     const test = testsToRun[i];
-    console.log(" Running test", i, "/", allTests.length, test.name)
+    console.log(" Running test", i, "/", testsToRun.length, test.name)
     allFailures.push(...(test.Run() ?? []))
     console.log("OK!")
 }

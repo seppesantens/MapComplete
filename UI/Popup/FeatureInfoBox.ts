@@ -17,6 +17,7 @@ import LayerConfig from "../../Models/ThemeConfig/LayerConfig";
 import {Translation} from "../i18n/Translation";
 import {Utils} from "../../Utils";
 import {SubstitutedTranslation} from "../SubstitutedTranslation";
+import MoveWizard from "./MoveWizard";
 
 export default class FeatureInfoBox extends ScrollableFullScreen {
 
@@ -72,6 +73,19 @@ export default class FeatureInfoBox extends ScrollableFullScreen {
             editElements.push(questionBox);
         }
 
+        if(layerConfig.allowMove) {
+            editElements.push(
+                new VariableUiElement(tags.map(tags => tags.id).map(id => {
+                        const feature = State.state.allElements.ContainingFeatures.get(id)
+                        return new MoveWizard(
+                            feature,
+                            State.state,
+                            layerConfig.allowMove
+                        );
+                    })
+                )
+            );
+        }
 
         if (layerConfig.deletion) {
             editElements.push(
@@ -119,7 +133,7 @@ export default class FeatureInfoBox extends ScrollableFullScreen {
                 State.state.featureSwitchIsDebugging.map(isDebugging => {
                     if (isDebugging) {
                         const config: TagRenderingConfig = new TagRenderingConfig({render: "{all_tags()}"}, new Tag("id", ""), "");
-                        return new TagRenderingAnswer(tags, config)
+                        return new TagRenderingAnswer(tags, config, "all_tags")
                     }
                 })
             )

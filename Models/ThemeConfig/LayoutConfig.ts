@@ -7,12 +7,12 @@ import {Utils} from "../../Utils";
 import LayerConfig from "./LayerConfig";
 import {LayerConfigJson} from "./Json/LayerConfigJson";
 import Constants from "../Constants";
+import TilesourceConfig from "./TilesourceConfig";
 
 export default class LayoutConfig {
     public readonly id: string;
     public readonly maintainer: string;
     public readonly credits?: string;
-    public readonly changesetmessage?: string;
     public readonly version: string;
     public readonly language: string[];
     public readonly title: Translation;
@@ -28,9 +28,10 @@ export default class LayoutConfig {
     public readonly roamingRenderings: TagRenderingConfig[];
     public readonly defaultBackgroundId?: string;
     public layers: LayerConfig[];
+    public tileLayerSources: TilesourceConfig[]
     public readonly clustering?: {
         maxZoom: number,
-        minNeededElements: number
+        minNeededElements: number,
     };
     public readonly hideFromOverview: boolean;
     public lockLocation: boolean | [[number, number], [number, number]];
@@ -45,6 +46,7 @@ export default class LayoutConfig {
     public readonly enableShowAllQuestions: boolean;
     public readonly enableExportButton: boolean;
     public readonly enablePdfDownload: boolean;
+    public readonly enableIframePopout: boolean;
 
     public readonly customCss?: string;
     /*
@@ -53,15 +55,16 @@ export default class LayoutConfig {
     public readonly cacheTimeout?: number;
     public readonly overpassUrl: string[];
     public readonly overpassTimeout: number;
+    public readonly overpassMaxZoom: number
+    public readonly osmApiTileSize: number
     public readonly official: boolean;
-
+ 
     constructor(json: LayoutConfigJson, official = true, context?: string) {
         this.official = official;
         this.id = json.id;
         context = (context ?? "") + "." + this.id;
         this.maintainer = json.maintainer;
         this.credits = json.credits;
-        this.changesetmessage = json.changesetmessage;
         this.version = json.version;
         this.language = [];
         if (typeof json.language === "string") {
@@ -87,14 +90,8 @@ export default class LayoutConfig {
         this.startZoom = json.startZoom;
         this.startLat = json.startLat;
         this.startLon = json.startLon;
-        if(json.widenFactor < 1){
-            if(official){
-                throw "Widenfactor too small"
-            }else{
-                // Unofficial themes get away with this
-                console.warn("Detected a very small widenfactor for theme ", this.id ,", bumping this above 1.")
-                json.widenFactor = json.widenFactor + 1
-            }
+        if(json.widenFactor <= 0){
+                throw "Widenfactor too small, shoud be > 0"
         }
         if(json.widenFactor > 20){
             throw "Widenfactor is very big, use a value between 1 and 5 (current value is "+json.widenFactor+") at "+context
@@ -110,6 +107,7 @@ export default class LayoutConfig {
             }
         );
         this.defaultBackgroundId = json.defaultBackgroundId;
+        this.tileLayerSources = (json.tileLayerSources??[]).map((config, i) => new TilesourceConfig(config, `${this.id}.tileLayerSources[${i}]`))
         this.layers = LayoutConfig.ExtractLayers(json, official, context);
 
         // ALl the layers are constructed, let them share tagRenderings now!
@@ -139,12 +137,17 @@ export default class LayoutConfig {
 
         this.clustering = {
             maxZoom: 16,
-            minNeededElements: 25
+            minNeededElements: 25,
         };
-        if (json.clustering) {
+        if(json.clustering === false){
+            this.clustering = {
+                maxZoom: 0,
+                minNeededElements: 100000,
+            };
+        }else         if (json.clustering) {
             this.clustering = {
                 maxZoom: json.clustering.maxZoom ?? 18,
-                minNeededElements: json.clustering.minNeededElements ?? 25
+                minNeededElements: json.clustering.minNeededElements ?? 25,
             }
         }
 
@@ -153,7 +156,7 @@ export default class LayoutConfig {
         if (json.hideInOverview) {
             throw "The json for " + this.id + " contains a 'hideInOverview'. Did you mean hideFromOverview instead?"
         }
-        this.lockLocation = json.lockLocation ?? undefined;
+        this.lockLocation = <[[number, number], [number, number]]> json.lockLocation ?? undefined;
         this.enableUserBadge = json.enableUserBadge ?? true;
         this.enableShareScreen = json.enableShareScreen ?? true;
         this.enableMoreQuests = json.enableMoreQuests ?? true;
@@ -165,6 +168,7 @@ export default class LayoutConfig {
         this.enableShowAllQuestions = json.enableShowAllQuestions ?? false;
         this.enableExportButton = json.enableDownload ?? false;
         this.enablePdfDownload = json.enablePdfDownload ?? false;
+        this.enableIframePopout = json.enableIframePopout ?? true
         this.customCss = json.customCss;
         this.cacheTimeout = json.cacheTimout ?? (60 * 24 * 60 * 60)
         this.overpassUrl = Constants.defaultOverpassUrls
@@ -176,6 +180,8 @@ export default class LayoutConfig {
             }
         }
         this.overpassTimeout = json.overpassTimeout ?? 30
+        this.overpassMaxZoom = json.overpassMaxZoom ?? 17
+        this.osmApiTileSize = json.osmApiTileSize ?? this.overpassMaxZoom + 1
 
     }
 

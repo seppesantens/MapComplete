@@ -14,6 +14,7 @@ import LayoutConfig from "../Models/ThemeConfig/LayoutConfig";
 import FeaturePipeline from "../Logic/FeatureSource/FeaturePipeline";
 import ShowDataLayer from "./ShowDataLayer/ShowDataLayer";
 import {BBox} from "../Logic/BBox";
+import ShowOverlayLayer from "./ShowDataLayer/ShowOverlayLayer";
 /**
  * Creates screenshoter to take png screenshot
  * Creates jspdf and downloads it
@@ -87,18 +88,23 @@ export default class ExportPDF {
         minimap.leafletMap .addCallbackAndRunD(leaflet => {
             const bounds = BBox.fromLeafletBounds(leaflet.getBounds().pad(0.2))
             options.features.GetTilesPerLayerWithin(bounds, tile => {
+                if(tile.layer.layerDef.minzoom > l.zoom){
+                    return
+                }
                 new ShowDataLayer(
                     {
                         features: tile,
                         leafletMap: minimap.leafletMap,
                         layerToShow: tile.layer.layerDef,
-                        enablePopups: false
+                        enablePopups: false,
+                        doShowLayer: tile.layer.isDisplayed
                     }
                 )
             })
             
         })
 
+        State.state.AddAllOverlaysToMap(minimap.leafletMap)
     }
 
     private cleanup() {

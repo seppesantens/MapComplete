@@ -5,81 +5,6 @@
     },
     "artwork": {
         "description": "オープン アートワーク マップへようこそ。世界中の銅像や胸像、壁の落書きなどのアートワークの地図です",
-        "layers": {
-            "0": {
-                "description": "多様な作品",
-                "name": "美術品",
-                "presets": {
-                    "0": {
-                        "title": "アートワーク"
-                    }
-                },
-                "tagRenderings": {
-                    "artwork-artist_name": {
-                        "question": "どのアーティストが作ったんですか?",
-                        "render": "作成者:{artist_name}"
-                    },
-                    "artwork-artwork_type": {
-                        "mappings": {
-                            "0": {
-                                "then": "建物"
-                            },
-                            "1": {
-                                "then": "壁画"
-                            },
-                            "2": {
-                                "then": "絵画"
-                            },
-                            "3": {
-                                "then": "彫刻"
-                            },
-                            "4": {
-                                "then": "彫像"
-                            },
-                            "5": {
-                                "then": "胸像"
-                            },
-                            "6": {
-                                "then": "石"
-                            },
-                            "7": {
-                                "then": "インスタレーション"
-                            },
-                            "8": {
-                                "then": "落書き"
-                            },
-                            "9": {
-                                "then": "レリーフ"
-                            },
-                            "10": {
-                                "then": "Azulejo (スペインの装飾タイル)"
-                            },
-                            "11": {
-                                "then": "タイルワーク"
-                            }
-                        },
-                        "question": "この作品の種類は何ですか?",
-                        "render": "これは{artwork_type}です"
-                    },
-                    "artwork-website": {
-                        "question": "この作品についての詳しい情報はどのウェブサイトにありますか?",
-                        "render": "<a href='{website}' target='_blank'>Webサイト</a>に詳細情報がある"
-                    },
-                    "artwork-wikidata": {
-                        "question": "<b>このアートワーク</b>に関するWikidataのエントリーはどれですか?",
-                        "render": "<a href='https://www.wikidata.org/wiki/{wikidata}' target='_blank'>{wikidata}</a>に関連する"
-                    }
-                },
-                "title": {
-                    "mappings": {
-                        "0": {
-                            "then": "アートワーク <i>{name}</i>"
-                        }
-                    },
-                    "render": "アートワーク"
-                }
-            }
-        },
         "title": "オープン アートワーク マップ"
     },
     "benches": {
@@ -300,21 +225,23 @@
                 }
             }
         },
-        "roamingRenderings": {
-            "0": {
-                "question": "この店は誰が経営しているんですか?",
-                "render": "この場所は{operator}によって運営されます"
-            },
-            "1": {
-                "mappings": {
-                    "0": {
-                        "then": "この場所には電源があります"
-                    },
-                    "1": {
-                        "then": "この場所には電源がありません"
-                    }
+        "overrideAll": {
+            "tagRenderings+": {
+                "0": {
+                    "question": "この店は誰が経営しているんですか?",
+                    "render": "この場所は{operator}によって運営されます"
                 },
-                "question": "この場所に電源はありますか?"
+                "1": {
+                    "mappings": {
+                        "0": {
+                            "then": "この場所には電源があります"
+                        },
+                        "1": {
+                            "then": "この場所には電源がありません"
+                        }
+                    },
+                    "question": "この場所に電源はありますか?"
+                }
             }
         },
         "shortDescription": "キャンパーと夜を共にするキャンプサイトを見つける",
@@ -454,94 +381,96 @@
                 }
             }
         },
-        "roamingRenderings": {
-            "0": {
-                "question": "もっと情報のある(非公式の)ウェブサイトはありますか(例えば、topos)?"
-            },
-            "4": {
-                "question": "ルートの(平均)長さはメートル単位でいくつですか?",
-                "render": "ルートの長さは平均で<b>{canonical(climbing:length)}</b>です"
-            },
-            "5": {
-                "question": "ここで一番簡単なルートのレベルは、フランスのランク評価システムで何ですか?",
-                "render": "フランス/ベルギーのランク評価システムでは、最小の難易度は{climbing:grade:french:min}です"
-            },
-            "6": {
-                "question": "フランスのランク評価によると、ここで一番難しいルートのレベルはどれくらいですか?",
-                "render": "フランス/ベルギーのランク評価システムでは、最大の難易度は{climbing:grade:french:max}です"
-            },
-            "7": {
-                "mappings": {
-                    "0": {
-                        "then": "ボルダリングはここで可能です"
-                    },
-                    "1": {
-                        "then": "ここではボルダリングはできません"
-                    },
-                    "2": {
-                        "then": "ボルダリングは可能ですが、少しのルートしかありません"
-                    },
-                    "3": {
-                        "then": "{climbing:boulder} ボルダールートがある"
-                    }
+        "overrideAll": {
+            "tagRenderings+": {
+                "0": {
+                    "question": "もっと情報のある(非公式の)ウェブサイトはありますか(例えば、topos)?"
                 },
-                "question": "ここでボルダリングはできますか?"
-            },
-            "8": {
-                "mappings": {
-                    "0": {
-                        "then": "ここでToprope登坂ができます"
-                    },
-                    "1": {
-                        "then": "ここではToprope登坂はできません"
-                    },
-                    "2": {
-                        "then": "{climbing:toprope} 登坂ルートがある"
-                    }
+                "4": {
+                    "question": "ルートの(平均)長さはメートル単位でいくつですか?",
+                    "render": "ルートの長さは平均で<b>{canonical(climbing:length)}</b>です"
                 },
-                "question": "ここでtoprope登坂はできますか?"
-            },
-            "9": {
-                "mappings": {
-                    "0": {
-                        "then": "ここでスポーツクライミングができます"
-                    },
-                    "1": {
-                        "then": "ここではスポーツクライミングはできません"
-                    },
-                    "2": {
-                        "then": "スポーツクライミングの {climbing:sport} ルートがある"
-                    }
+                "5": {
+                    "question": "ここで一番簡単なルートのレベルは、フランスのランク評価システムで何ですか?",
+                    "render": "フランス/ベルギーのランク評価システムでは、最小の難易度は{climbing:grade:french:min}です"
                 },
-                "question": "ここでは固定アンカー式のスポーツクライミングはできますか?"
-            },
-            "10": {
-                "mappings": {
-                    "0": {
-                        "then": "ここでは伝統的な登山が可能です"
-                    },
-                    "1": {
-                        "then": "伝統的な登山はここではできない"
-                    },
-                    "2": {
-                        "then": "{climbing:traditional} の伝統的な登山ルートがある"
-                    }
+                "6": {
+                    "question": "フランスのランク評価によると、ここで一番難しいルートのレベルはどれくらいですか?",
+                    "render": "フランス/ベルギーのランク評価システムでは、最大の難易度は{climbing:grade:french:max}です"
                 },
-                "question": "伝統的な登山はここで可能ですか(例えば、チョックのような独自のギアを使用して)？"
-            },
-            "11": {
-                "mappings": {
-                    "0": {
-                        "then": "スピードクライミングウォールがある"
+                "7": {
+                    "mappings": {
+                        "0": {
+                            "then": "ボルダリングはここで可能です"
+                        },
+                        "1": {
+                            "then": "ここではボルダリングはできません"
+                        },
+                        "2": {
+                            "then": "ボルダリングは可能ですが、少しのルートしかありません"
+                        },
+                        "3": {
+                            "then": "{climbing:boulder} ボルダールートがある"
+                        }
                     },
-                    "1": {
-                        "then": "スピードクライミングウォールがない"
-                    },
-                    "2": {
-                        "then": "{climbing:speed} のスピードクライミングウォールがある"
-                    }
+                    "question": "ここでボルダリングはできますか?"
                 },
-                "question": "スピードクライミングウォールはありますか?"
+                "8": {
+                    "mappings": {
+                        "0": {
+                            "then": "ここでToprope登坂ができます"
+                        },
+                        "1": {
+                            "then": "ここではToprope登坂はできません"
+                        },
+                        "2": {
+                            "then": "{climbing:toprope} 登坂ルートがある"
+                        }
+                    },
+                    "question": "ここでtoprope登坂はできますか?"
+                },
+                "9": {
+                    "mappings": {
+                        "0": {
+                            "then": "ここでスポーツクライミングができます"
+                        },
+                        "1": {
+                            "then": "ここではスポーツクライミングはできません"
+                        },
+                        "2": {
+                            "then": "スポーツクライミングの {climbing:sport} ルートがある"
+                        }
+                    },
+                    "question": "ここでは固定アンカー式のスポーツクライミングはできますか?"
+                },
+                "10": {
+                    "mappings": {
+                        "0": {
+                            "then": "ここでは伝統的な登山が可能です"
+                        },
+                        "1": {
+                            "then": "伝統的な登山はここではできない"
+                        },
+                        "2": {
+                            "then": "{climbing:traditional} の伝統的な登山ルートがある"
+                        }
+                    },
+                    "question": "伝統的な登山はここで可能ですか(例えば、チョックのような独自のギアを使用して)？"
+                },
+                "11": {
+                    "mappings": {
+                        "0": {
+                            "then": "スピードクライミングウォールがある"
+                        },
+                        "1": {
+                            "then": "スピードクライミングウォールがない"
+                        },
+                        "2": {
+                            "then": "{climbing:speed} のスピードクライミングウォールがある"
+                        }
+                    },
+                    "question": "スピードクライミングウォールはありますか?"
+                }
             }
         },
         "title": "登山地図を開く"
@@ -573,27 +502,29 @@
                 }
             }
         },
-        "roamingRenderings": {
-            "0": {
-                "mappings": {
-                    "0": {
-                        "then": "cyclestreet(最高速度は30km/h)"
+        "overrideAll": {
+            "tagRenderings+": {
+                "0": {
+                    "mappings": {
+                        "0": {
+                            "then": "cyclestreet(最高速度は30km/h)"
+                        },
+                        "1": {
+                            "then": "この通りはcyclestreetだ"
+                        },
+                        "2": {
+                            "then": "この通りはまもなくcyclstreetになるだろう"
+                        },
+                        "3": {
+                            "then": "この通りはcyclestreetではない"
+                        }
                     },
-                    "1": {
-                        "then": "この通りはcyclestreetだ"
-                    },
-                    "2": {
-                        "then": "この通りはまもなくcyclstreetになるだろう"
-                    },
-                    "3": {
-                        "then": "この通りはcyclestreetではない"
-                    }
+                    "question": "この通りはcyclestreetですか?"
                 },
-                "question": "この通りはcyclestreetですか?"
-            },
-            "1": {
-                "question": "この通りはいつcyclestreetになるんですか?",
-                "render": "この通りは{cyclestreet:start_date}に、cyclestreetになります"
+                "1": {
+                    "question": "この通りはいつcyclestreetになるんですか?",
+                    "render": "この通りは{cyclestreet:start_date}に、cyclestreetになります"
+                }
             }
         },
         "shortDescription": "cyclestreetsの地図",
@@ -917,77 +848,6 @@
     },
     "shops": {
         "description": "この地図には店の基本情報を記入したり営業時間や電話番号を追加することができます",
-        "layers": {
-            "0": {
-                "description": "ショップ",
-                "name": "店",
-                "presets": {
-                    "0": {
-                        "description": "新しい店を追加する",
-                        "title": "店"
-                    }
-                },
-                "tagRenderings": {
-                    "shops-email": {
-                        "question": "このお店のメールアドレスは何ですか?",
-                        "render": "<a href='mailto:{email}'>{email}</a>"
-                    },
-                    "shops-name": {
-                        "question": "このお店の名前は何ですか?"
-                    },
-                    "shops-opening_hours": {
-                        "question": "この店の営業時間は何時から何時までですか?",
-                        "render": "{opening_hours_table(opening_hours)}"
-                    },
-                    "shops-phone": {
-                        "question": "電話番号は何番ですか?",
-                        "render": "<a href='tel:{phone}'>{phone}</a>"
-                    },
-                    "shops-shop": {
-                        "mappings": {
-                            "0": {
-                                "then": "コンビニエンスストア"
-                            },
-                            "1": {
-                                "then": "スーパーマーケット"
-                            },
-                            "2": {
-                                "then": "衣料品店"
-                            },
-                            "3": {
-                                "then": "理容師"
-                            },
-                            "4": {
-                                "then": "ベーカリー"
-                            },
-                            "5": {
-                                "then": "自動車修理(ガレージ)"
-                            },
-                            "6": {
-                                "then": "自動車ディーラー"
-                            }
-                        },
-                        "question": "このお店では何を売っていますか?",
-                        "render": "こちらのお店では{shop}を販売しております"
-                    },
-                    "shops-website": {
-                        "question": "このお店のホームページは何ですか?",
-                        "render": "<a href='{website}'>{website}</a>"
-                    }
-                },
-                "title": {
-                    "mappings": {
-                        "0": {
-                            "then": "{name}"
-                        },
-                        "1": {
-                            "then": "{shop}"
-                        }
-                    },
-                    "render": "店"
-                }
-            }
-        },
         "shortDescription": "基本的なショップ情報を含む編集可能なマップ",
         "title": "オープン ショップ マップ"
     },

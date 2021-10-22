@@ -27,7 +27,8 @@
         "nl": "Deze laag toont picnictafels",
         "it": "Il livello che mostra i tavoli da picnic",
         "fr": "La couche montrant les tables de pique-nique",
-        "ru": "Слой, отображающий столы для пикника"
+        "ru": "Слой, отображающий столы для пикника",
+        "de": "Die Ebene zeigt Picknicktische an"
     },
     "tagRenderings": [
         {
@@ -95,11 +96,24 @@
                 "en": "picnic table",
                 "nl": "picnic-tafel",
                 "it": "tavolo da picnic",
-                "ru": "Стол для пикника",
+                "ru": "стол для пикника",
                 "de": "picknicktisch",
                 "fr": "table de pique-nique"
             }
         }
     ],
-    "wayHandling": 1
+    "wayHandling": 1,
+    "deletion": {
+        "softDeletionTags": {
+            "and": [
+                "disused:amenity:={amenity}",
+                "amenity="
+            ]
+        },
+        "neededChangesets": 1
+    },
+    "allowMove": {
+        "enableRelocation": false,
+        "enableImproveAccuraccy": true
+    }
 }

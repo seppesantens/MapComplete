@@ -3,7 +3,25 @@
     "render": "{image_carousel()}{image_upload()}"
   },
   "wikipedia": {
-    "render": "{wikipedia():max-height:25rem}"
+    "render": "{wikipedia():max-height:25rem}",
+    "question": {
+      "en": "What is the corresponding Wikidata entity?",
+      "nl": "Welk Wikidata-item komt overeen met dit object?"
+    },
+    "mappings": [
+      {
+        "if": "wikidata=",
+        "then": {
+          "en": "No Wikipedia page has been linked yet",
+          "nl": "Er werd nog geen Wikipedia-pagina gekoppeld"
+        },
+        "hideInAnswer": true
+      }
+    ],
+    "freeform": {
+      "key": "wikidata",
+      "type": "wikidata"
+    }
   },
   "reviews": {
     "render": "{reviews()}"
@@ -44,7 +62,23 @@
   },
   "wikipedialink": {
     "render": "<a href='https://wikipedia.org/wiki/{wikipedia}' target='_blank'><img src='./assets/wikipedia.svg' alt='WP'/></a>",
-    "condition": "wikipedia~*"
+    "question": {
+      "en": "What is the corresponding item on Wikipedia?",
+      "nl": "Welk Wikipedia-artikel beschrijft dit object?"
+    },
+    "mappings": [
+      {
+        "if": "wikidata=",
+        "then": {
+          "en": "Not linked with Wikipedia",
+          "nl": "Nog geen Wikipedia-artikel bekend"
+        }
+      }
+    ],
+    "freeform": {
+      "key": "wikidata",
+      "type": "wikidata"
+    }
   },
   "email": {
     "render": "<a href='mailto:{email}' target='_blank'>{email}</a>",
@@ -96,7 +130,9 @@
       "nl": "Is deze plaats rolstoeltoegankelijk?",
       "en": "Is this place accessible with a wheelchair?",
       "pt": "Este lugar é acessível a utilizadores de cadeiras de rodas?",
-      "pt_BR": "Este lugar é acessível com uma cadeira de rodas?"
+      "pt_BR": "Este lugar é acessível com uma cadeira de rodas?",
+      "de": "Ist dieser Ort mit einem Rollstuhl zugänglich?",
+      "fr": "Est-ce que cet endroit est accessible en chaise roulante ?"
     },
     "mappings": [
       {
@@ -109,7 +145,8 @@
           "nl": "Deze plaats is speciaal aangepast voor gebruikers van een rolstoel",
           "en": "This place is specially adapated for wheelchair users",
           "pt": "Este lugar está especialmente adaptado para utilizadores de cadeira de rodas",
-          "pt_BR": "Este lugar é especialmente adaptado para usuários de cadeira de rodas"
+          "pt_BR": "Este lugar é especialmente adaptado para usuários de cadeira de rodas",
+          "de": "Dieser Ort ist speziell für Rollstuhlfahrer eingerichtet"
         }
       },
       {
@@ -122,7 +159,8 @@
           "nl": "Deze plaats is vlot bereikbaar met een rolstoel",
           "en": "This place is easily reachable with a wheelchair",
           "pt": "Este lugar é de fácil acesso com uma cadeira de rodas",
-          "pt_BR": "Este lugar é facilmente acessível com uma cadeira de rodas"
+          "pt_BR": "Este lugar é facilmente acessível com uma cadeira de rodas",
+          "de": "Dieser Ort ist mit einem Rollstuhl leicht zu erreichen"
         }
       },
       {
@@ -135,7 +173,9 @@
           "nl": "Deze plaats is bereikbaar met een rolstoel, maar het is niet makkelijk",
           "en": "It is possible to reach this place in a wheelchair, but it is not easy",
           "pt": "É possível chegar a este local em cadeira de rodas, mas não é fácil",
-          "pt_BR": "É possível chegar a esse local em uma cadeira de rodas, mas não é fácil"
+          "pt_BR": "É possível chegar a esse local em uma cadeira de rodas, mas não é fácil",
+          "de": "Es ist möglich, diesen Ort mit einem Rollstuhl zu erreichen, aber es ist nicht einfach",
+          "fr": "Il est possible d'accéder à cet endroit en chaise roulante, mais ce n'est pas facile"
         }
       },
       {
@@ -148,7 +188,9 @@
           "nl": "Niet rolstoeltoegankelijk",
           "en": "This place is not reachable with a wheelchair",
           "pt": "Este lugar não é acessível com uma cadeira de rodas",
-          "pt_BR": "Este lugar não é alcançável com uma cadeira de rodas"
+          "pt_BR": "Este lugar não é alcançável com uma cadeira de rodas",
+          "de": "Dieser Ort ist nicht mit einem Rollstuhl erreichbar",
+          "fr": "Cet endroit n'est pas accessible en chaise roulante"
         }
       }
     ]
@@ -157,7 +199,9 @@
     "question": {
       "en": "Are dogs allowed in this business?",
       "nl": "Zijn honden toegelaten in deze zaak?",
-      "pt": "Os cães são permitidos neste estabelecimento?"
+      "pt": "Os cães são permitidos neste estabelecimento?",
+      "de": "Sind Hunde in diesem Geschäft erlaubt?",
+      "fr": "Est-ce que les chiens sont admis ici ?"
     },
     "mappings": [
       {
@@ -165,7 +209,9 @@
         "then": {
           "en": "Dogs are allowed",
           "nl": "honden zijn toegelaten",
-          "pt": "Os cães são permitidos"
+          "pt": "Os cães são permitidos",
+          "de": "Hunde sind erlaubt",
+          "fr": "Chiens admis"
         }
       },
       {
@@ -173,7 +219,9 @@
         "then": {
           "en": "Dogs are <b>not</b> allowed",
           "nl": "honden zijn <b>niet</b> toegelaten",
-          "pt": "Os cães <b>não</b> são permitidos"
+          "pt": "Os cães <b>não</b> são permitidos",
+          "de": "Hunde sind <b>nicht</b> erlaubt",
+          "fr": "Les chiens <b>ne</b> sont <b>pas</b> admis"
         }
       },
       {
@@ -181,7 +229,9 @@
         "then": {
           "en": "Dogs are allowed, but they have to be leashed",
           "nl": "honden zijn <b>enkel aan de leiband</b> welkom",
-          "pt": "Os cães são permitidos, mas têm de ser presos pela trela"
+          "pt": "Os cães são permitidos, mas têm de ser presos pela trela",
+          "de": "Hunde sind erlaubt, müssen aber angeleint sein",
+          "fr": "Les chiens sont admis, mais ils doivent être tenus en laisse"
         }
       },
       {
@@ -189,7 +239,9 @@
         "then": {
           "en": "Dogs are allowed and can run around freely",
           "nl": "honden zijn welkom en mogen vrij rondlopen",
-          "pt": "Os cães são permitidos e podem correr livremente"
+          "pt": "Os cães são permitidos e podem correr livremente",
+          "de": "Hunde sind erlaubt und können frei herumlaufen",
+          "fr": "Les chiens sont admis et peuvent circuler librement"
         }
       }
     ]
@@ -253,7 +305,9 @@
       "nl": "Welke betaalmiddelen worden hier geaccepteerd?",
       "pt": "Que métodos de pagamento são aceites aqui?",
       "pt_BR": "Quais métodos de pagamento são aceitos aqui?",
-      "id": "Metode pembayaran manakah yang di terima disini?"
+      "id": "Metode pembayaran manakah yang di terima disini?",
+      "de": "Welche Zahlungsmethoden werden hier akzeptiert?",
+      "fr": "Quelles sont les méthodes de paiement acceptées ici ?"
     },
     "multiAnswer": true,
     "mappings": [
@@ -265,7 +319,9 @@
           "nl": "Cash geld wordt hier aanvaard",
           "pt": "Aceitam pagamento com dinheiro aqui",
           "pt_BR": "Dinheiro é aceito aqui",
-          "id": "Disini menerima pembayaran tunai"
+          "id": "Disini menerima pembayaran tunai",
+          "de": "Hier wird Bargeld akzeptiert",
+          "fr": "Paiement en liquide accepté"
         }
       },
       {
@@ -276,7 +332,9 @@
           "nl": "Betalen met bankkaarten kan hier",
           "pt": "Aceitam pagamento com cartões bancários aqui",
           "pt_BR": "Cartões de pagamento são aceitos aqui",
-          "id": "Disini menerima pembayaran dengan kartu"
+          "id": "Disini menerima pembayaran dengan kartu",
+          "de": "Hier werden Zahlungskarten akzeptiert",
+          "fr": "Paiement par carte accepté"
         }
       }
     ]
@@ -331,7 +389,8 @@
           "fr": "En sous-sol",
           "pl": "Znajduje się pod ziemią",
           "sv": "Ligger under jorden",
-          "pt": "Está no subsolo"
+          "pt": "Está no subsolo",
+          "de": "Unterirdisch gelegen"
         },
         "hideInAnswer": true
       },

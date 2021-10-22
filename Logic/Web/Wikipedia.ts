@@ -3,7 +3,6 @@
  */
 import {Utils} from "../../Utils";
 import {UIEventSource} from "../UIEventSource";
-import Wikidata from "./Wikidata";
 
 export default class Wikipedia {
 
@@ -20,7 +19,12 @@ export default class Wikipedia {
         "ambox",
         "mw-editsection",
         "mw-selflink",
+        "mw-empty-elt",
         "hatnote" // Often redirects
+    ]
+    
+    private static readonly idsToRemove = [
+        "sjabloon_zie"
     ]
 
     private static readonly _cache = new Map<string, UIEventSource<{ success: string } | { error: any }>>()
@@ -58,6 +62,13 @@ export default class Wikipedia {
                 toRemoveElement.parentElement?.removeChild(toRemoveElement)
             }
         }
+
+        for (const forbiddenId of Wikipedia.idsToRemove) {
+            const toRemove = content.querySelector("#"+forbiddenId)
+            toRemove?.parentElement?.removeChild(toRemove)
+        }
+        
+        
 
         const links = Array.from(content.getElementsByTagName("a"))
 
