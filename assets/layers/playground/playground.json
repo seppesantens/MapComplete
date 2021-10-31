@@ -488,8 +488,7 @@
                     "opening_hours~*"
                 ]
             },
-            "then": "isOpen",
-            "badge": true
+            "then": "isOpen"
         }
     ],
     "width": {
@@ -542,5 +541,56 @@
                 "leisure="
             ]
         }
-    }
+    },
+    "mapRendering": [
+        {
+            "icon": {
+                "render": "./assets/themes/playgrounds/playground.svg"
+            },
+            "iconBadges": [
+                {
+                    "if": {
+                        "and": [
+                            "opening_hours!=24/7",
+                            "opening_hours~*"
+                        ]
+                    },
+                    "then": "isOpen"
+                }
+            ],
+            "iconSize": {
+                "render": "40,40,center",
+                "mappings": [
+                    {
+                        "if": "id~node/.*",
+                        "then": "40,40,center"
+                    },
+                    {
+                        "if": "_size_classification=small",
+                        "then": "25,25,center"
+                    },
+                    {
+                        "if": "_size_classification=medium",
+                        "then": "40,40,center"
+                    },
+                    {
+                        "if": "_size_classification=large",
+                        "then": "60,60,center"
+                    }
+                ]
+            },
+            "location": [
+                "point",
+                "centroid"
+            ]
+        },
+        {
+            "color": {
+                "render": "#5dbaa9"
+            },
+            "width": {
+                "render": "1"
+            }
+        }
+    ]
 }

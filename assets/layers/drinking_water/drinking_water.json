@@ -5,7 +5,7 @@
         "nl": "Drinkbaar water",
         "fr": "Eau potable",
         "gl": "Auga potábel",
-        "de": "Trinkwasser",
+        "de": "Trinkwasserstelle",
         "it": "Acqua potabile",
         "ru": "Питьевая вода",
         "id": "Air minum"
@@ -16,7 +16,7 @@
             "nl": "Drinkbaar water",
             "fr": "Eau potable",
             "gl": "Auga potábel",
-            "de": "Trinkwasser",
+            "de": "Trinkwasserstelle",
             "it": "Acqua potabile",
             "ru": "Питьевая вода",
             "id": "Air minum"
@@ -33,8 +33,7 @@
                     "operational_status=closed"
                 ]
             },
-            "then": "close:#c33",
-            "badge": true
+            "then": "close:#c33"
         }
     ],
     "iconSize": "40,40,bottom",
@@ -181,5 +180,27 @@
     "allowMove": {
         "enableRelocation": false,
         "enableImproveAccuraccy": true
-    }
+    },
+    "mapRendering": [
+        {
+            "icon": {
+                "render": "pin:#6BC4F7;./assets/layers/drinking_water/drips.svg"
+            },
+            "iconBadges": [
+                {
+                    "if": {
+                        "or": [
+                            "operational_status=broken",
+                            "operational_status=closed"
+                        ]
+                    },
+                    "then": "close:#c33"
+                }
+            ],
+            "iconSize": "40,40,bottom",
+            "location": [
+                "point"
+            ]
+        }
+    ]
 }

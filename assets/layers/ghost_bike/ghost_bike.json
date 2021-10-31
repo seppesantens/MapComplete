@@ -3,7 +3,7 @@
     "name": {
         "en": "Ghost bikes",
         "nl": "Witte Fietsen",
-        "de": "Geisterrad",
+        "de": "Geisterräder",
         "it": "Bici fantasma",
         "fr": "Vélos fantômes",
         "eo": "Fantombiciklo",
@@ -203,5 +203,14 @@
     "allowMove": {
         "enableRelocation": false,
         "enableImproveAccuraccy": true
-    }
+    },
+    "mapRendering": [
+        {
+            "icon": "./assets/layers/ghost_bike/ghost_bike.svg",
+            "iconSize": "40,40,bottom",
+            "location": [
+                "point"
+            ]
+        }
+    ]
 }

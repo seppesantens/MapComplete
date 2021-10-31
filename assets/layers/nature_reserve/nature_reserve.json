@@ -461,5 +461,27 @@
                 }
             ]
         }
+    ],
+    "mapRendering": [
+        {
+            "icon": {
+                "render": "./assets/layers/nature_reserve/nature_reserve.svg"
+            },
+            "iconSize": {
+                "render": "50,50,center"
+            },
+            "location": [
+                "point",
+                "centroid"
+            ]
+        },
+        {
+            "color": {
+                "render": "#3c3"
+            },
+            "width": {
+                "render": "1"
+            }
+        }
     ]
 }

@@ -12,7 +12,6 @@ import OverpassFeatureSource from "../Actors/OverpassFeatureSource";
 import {Changes} from "../Osm/Changes";
 import GeoJsonSource from "./Sources/GeoJsonSource";
 import Loc from "../../Models/Loc";
-import WayHandlingApplyingFeatureSource from "./Sources/WayHandlingApplyingFeatureSource";
 import RegisteringAllFromFeatureSourceActor from "./Actors/RegisteringAllFromFeatureSourceActor";
 import TiledFromLocalStorageSource from "./TiledFeatureSource/TiledFromLocalStorageSource";
 import SaveTileToLocalStorageActor from "./Actors/SaveTileToLocalStorageActor";
@@ -26,18 +25,20 @@ import OsmFeatureSource from "./TiledFeatureSource/OsmFeatureSource";
 import {OsmConnection} from "../Osm/OsmConnection";
 import {Tiles} from "../../Models/TileRange";
 import TileFreshnessCalculator from "./TileFreshnessCalculator";
+import {ElementStorage} from "../ElementStorage";
+import FullNodeDatabaseSource from "./TiledFeatureSource/FullNodeDatabaseSource";
 
 
 /**
  * The features pipeline ties together a myriad of various datasources:
- * 
+ *
  * - The Overpass-API
  * - The OSM-API
  * - Third-party geojson files, either sliced or directly.
- * 
+ *
  * In order to truly understand this class, please have a look at the following diagram: https://cdn-images-1.medium.com/fit/c/800/618/1*qTK1iCtyJUr4zOyw4IFD7A.jpeg
- * 
- * 
+ *
+ *
  */
 export default class FeaturePipeline {
 
@@ -68,7 +69,7 @@ export default class FeaturePipeline {
 
     private readonly freshnesses = new Map<string, TileFreshnessCalculator>();
 
-    private readonly oldestAllowedDate: Date = new Date(new Date().getTime() - 60 * 60 * 24 * 30 * 1000);
+    private readonly oldestAllowedDate: Date;
     private readonly osmSourceZoomLevel
 
     constructor(
@@ -85,15 +86,29 @@ export default class FeaturePipeline {
             readonly overpassMaxZoom: UIEventSource<number>;
             readonly osmConnection: OsmConnection
             readonly currentBounds: UIEventSource<BBox>,
-            readonly osmApiTileSize: UIEventSource<number>
+            readonly osmApiTileSize: UIEventSource<number>,
+            readonly allElements: ElementStorage
         }) {
         this.state = state;
 
         const self = this
+        const expiryInSeconds = Math.min(...state.layoutToUse.layers.map(l => l.maxAgeOfCache))
+        for (const layer of state.layoutToUse.layers) {
+            TiledFromLocalStorageSource.cleanCacheForLayer(layer)
+        }
+        this.oldestAllowedDate = new Date(new Date().getTime() - expiryInSeconds);
         this.osmSourceZoomLevel = state.osmApiTileSize.data;
-        // milliseconds
         const useOsmApi = state.locationControl.map(l => l.zoom > (state.overpassMaxZoom.data ?? 12))
         this.relationTracker = new RelationsTracker()
+
+        state.changes.allChanges.addCallbackAndRun(allChanges => {
+            allChanges.filter(ch => ch.id < 0 && ch.changes !== undefined)
+                .map(ch => ch.changes)
+                .filter(coor => coor["lat"] !== undefined && coor["lon"] !== undefined)
+                .forEach(coor => {
+                    SaveTileToLocalStorageActor.poison(state.layoutToUse.layers.map(l => l.id), coor["lon"], coor["lat"])
+                })
+        })
 
 
         this.sufficientlyZoomed = state.locationControl.map(location => {
@@ -114,9 +129,7 @@ export default class FeaturePipeline {
             // This will already contain the merged features for this tile. In other words, this will only be triggered once for every tile
             const srcFiltered =
                 new FilteringFeatureSource(state, src.tileIndex,
-                    new WayHandlingApplyingFeatureSource(
                         new ChangeGeometryApplicator(src, state.changes)
-                    )
                 )
 
             handleFeatureSource(srcFiltered)
@@ -133,6 +146,11 @@ export default class FeaturePipeline {
             perLayerHierarchy.set(id, hierarchy)
 
             this.freshnesses.set(id, new TileFreshnessCalculator())
+
+            if(id === "type_node"){
+                // Handles by the 'FullNodeDatabaseSource'
+                continue;
+            }
 
             if (source.geojsonSource === undefined) {
                 // This is an OSM layer
@@ -192,7 +210,9 @@ export default class FeaturePipeline {
             neededTiles: neededTilesFromOsm,
             handleTile: tile => {
                 new RegisteringAllFromFeatureSourceActor(tile)
-                new SaveTileToLocalStorageActor(tile, tile.tileIndex)
+                if (tile.layer.layerDef.maxAgeOfCache > 0) {
+                    new SaveTileToLocalStorageActor(tile, tile.tileIndex)
+                }
                 perLayerHierarchy.get(tile.layer.layerDef.id).registerTile(tile)
                 tile.features.addCallbackAndRunD(_ => self.newDataLoadedSignal.setData(tile))
 
@@ -200,10 +220,20 @@ export default class FeaturePipeline {
             state: state,
             markTileVisited: (tileId) =>
                 state.filteredLayers.data.forEach(flayer => {
-                    SaveTileToLocalStorageActor.MarkVisited(flayer.layerDef.id, tileId, new Date())
+                    if (flayer.layerDef.maxAgeOfCache > 0) {
+                        SaveTileToLocalStorageActor.MarkVisited(flayer.layerDef.id, tileId, new Date())
+                    }
                     self.freshnesses.get(flayer.layerDef.id).addTileLoad(tileId, new Date())
                 })
         })
+        
+        if(state.layoutToUse.trackAllNodes){
+             new FullNodeDatabaseSource(state, osmFeatureSource, tile => {
+                 new RegisteringAllFromFeatureSourceActor(tile)
+                 perLayerHierarchy.get(tile.layer.layerDef.id).registerTile(tile)
+                 tile.features.addCallbackAndRunD(_ => self.newDataLoadedSignal.setData(tile))
+             })
+        }
 
 
         const updater = this.initOverpassUpdater(state, useOsmApi)
@@ -220,7 +250,7 @@ export default class FeaturePipeline {
                 maxZoomLevel: state.layoutToUse.clustering.maxZoom,
                 registerTile: (tile) => {
                     // We save the tile data for the given layer to local storage
-                    if(source.layer.layerDef.source.geojsonSource === undefined || source.layer.layerDef.source.isOsmCacheLayer == true){
+                    if (source.layer.layerDef.source.geojsonSource === undefined || source.layer.layerDef.source.isOsmCacheLayer == true) {
                         new SaveTileToLocalStorageActor(tile, tile.tileIndex)
                     }
                     perLayerHierarchy.get(source.layer.layerDef.id).registerTile(new RememberingSource(tile))
@@ -249,7 +279,7 @@ export default class FeaturePipeline {
 
 
         // Whenever fresh data comes in, we need to update the metatagging
-        self.newDataLoadedSignal.stabilized(1000).addCallback(_ => {
+        self.newDataLoadedSignal.stabilized(250).addCallback(src => {
             self.updateAllMetaTagging()
         })
 
@@ -257,7 +287,7 @@ export default class FeaturePipeline {
         this.runningQuery = updater.runningQuery.map(
             overpass => {
                 console.log("FeaturePipeline: runningQuery state changed. Overpass", overpass ? "is querying," : "is idle,",
-                    "osmFeatureSource is", osmFeatureSource.isRunning ? "is running and needs "+neededTilesFromOsm.data?.length+" tiles (already got "+ osmFeatureSource.downloadedTiles.size  +" tiles )" : "is idle")
+                    "osmFeatureSource is", osmFeatureSource.isRunning ? "is running and needs " + neededTilesFromOsm.data?.length + " tiles (already got " + osmFeatureSource.downloadedTiles.size + " tiles )" : "is idle")
                 return overpass || osmFeatureSource.isRunning.data;
             }, [osmFeatureSource.isRunning]
         )
@@ -353,7 +383,7 @@ export default class FeaturePipeline {
                 isActive: useOsmApi.map(b => !b && overpassIsActive.data, [overpassIsActive]),
                 onBboxLoaded: (bbox, date, downloadedLayers, paddedToZoomLevel) => {
                     Tiles.MapRange(bbox.containingTileRange(paddedToZoomLevel), (x, y) => {
-                       const tileIndex =  Tiles.tile_index(paddedToZoomLevel, x, y)
+                        const tileIndex = Tiles.tile_index(paddedToZoomLevel, x, y)
                         downloadedLayers.forEach(layer => {
                             self.freshnesses.get(layer.id).addTileLoad(tileIndex, date)
                             SaveTileToLocalStorageActor.MarkVisited(layer.id, tileIndex, date)
@@ -374,7 +404,7 @@ export default class FeaturePipeline {
         window.setTimeout(
             () => {
                 const layerDef = src.layer.layerDef;
-                MetaTagging.addMetatags(
+                const somethingChanged = MetaTagging.addMetatags(
                     src.features.data,
                     {
                         memberships: this.relationTracker,
@@ -395,9 +425,10 @@ export default class FeaturePipeline {
 
     private updateAllMetaTagging() {
         const self = this;
+        console.debug("Updating the meta tagging of all tiles as new data got loaded")
         this.perLayerHierarchy.forEach(hierarchy => {
-            hierarchy.loadedTiles.forEach(src => {
-                self.applyMetaTags(src)
+            hierarchy.loadedTiles.forEach(tile => {
+                self.applyMetaTags(tile)
             })
         })
 
@@ -412,7 +443,7 @@ export default class FeaturePipeline {
     }
 
     public GetFeaturesWithin(layerId: string, bbox: BBox): any[][] {
-        if(layerId === "*"){
+        if (layerId === "*") {
             return this.GetAllFeaturesWithin(bbox)
         }
         const requestedHierarchy = this.perLayerHierarchy.get(layerId)

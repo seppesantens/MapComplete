@@ -1,7 +1,7 @@
 import Combine from "../Base/Combine";
 import ScrollableFullScreen from "../Base/ScrollableFullScreen";
 import Translations from "../i18n/Translations";
-import AttributionPanel from "./AttributionPanel";
+import CopyrightPanel from "./CopyrightPanel";
 import ContributorCount from "../../Logic/ContributorCount";
 import Toggle from "../Input/Toggle";
 import MapControlButton from "../MapControlButton";
@@ -26,22 +26,23 @@ export default class LeftControls extends Combine {
                     featureSwitchEnableExport: UIEventSource<boolean>,
                     featureSwitchExportAsPdf: UIEventSource<boolean>,
                     filteredLayers: UIEventSource<FilteredLayer[]>,
-                    featureSwitchFilter: UIEventSource<boolean>,
-                    selectedElement: UIEventSource<any>
+                    featureSwitchFilter: UIEventSource<boolean>
                 },
                 guiState: {
                     downloadControlIsOpened: UIEventSource<boolean>,
                     filterViewIsOpened: UIEventSource<boolean>,
+                    copyrightViewIsOpened: UIEventSource<boolean>
                 }) {
 
         const toggledCopyright = new ScrollableFullScreen(
             () => Translations.t.general.attribution.attributionTitle.Clone(),
             () =>
-                new AttributionPanel(
-                    state.layoutToUse,
+                new CopyrightPanel(
+                    state,
                     new ContributorCount(state).Contributors
                 ),
-            undefined
+             "copyright",
+             guiState.copyrightViewIsOpened
         );
 
         const copyrightButton = new Toggle(
@@ -49,8 +50,7 @@ export default class LeftControls extends Combine {
             new MapControlButton(Svg.copyright_svg())
                 .onClick(() => toggledCopyright.isShown.setData(true)),
             toggledCopyright.isShown
-        )
-            .SetClass("p-0.5");
+        ).SetClass("p-0.5");
 
         const toggledDownload = new Toggle(
             new AllDownloads(
@@ -73,11 +73,11 @@ export default class LeftControls extends Combine {
                 () => Translations.t.general.layerSelection.title.Clone(),
                 () =>
                     new FilterView(state.filteredLayers, state.overlayToggles).SetClass(
-                        "block p-1 rounded-full"
+                        "block p-1"
                     ),
-                undefined,
+                "filters",
                 guiState.filterViewIsOpened
-            ),
+            ).SetClass("rounded-lg"),
             new MapControlButton(Svg.filter_svg())
                 .onClick(() => guiState.filterViewIsOpened.setData(true)),
             guiState.filterViewIsOpened
@@ -90,18 +90,6 @@ export default class LeftControls extends Combine {
         );
 
 
-        state.locationControl.addCallback(() => {
-            // Close the layer selection when the map is moved
-            toggledDownload.isEnabled.setData(false);
-            copyrightButton.isEnabled.setData(false);
-            toggledFilter.isEnabled.setData(false);
-        });
-
-        state.selectedElement.addCallbackAndRunD((_) => {
-            toggledDownload.isEnabled.setData(false);
-            copyrightButton.isEnabled.setData(false);
-            toggledFilter.isEnabled.setData(false);
-        });
         super([filterButton,
             downloadButtonn,
             copyrightButton])

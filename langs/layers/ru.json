@@ -400,9 +400,6 @@
         }
     },
     "bike_repair_station": {
-        "icon": {
-            "render": "./assets/layers/bike_repair_station/repair_station.svg"
-        },
         "presets": {
             "0": {
                 "title": "Велосипедный насос"
@@ -635,24 +632,19 @@
         }
     },
     "charging_station": {
-        "description": "Зарядная станция",
-        "name": "Зарядные станции",
         "presets": {
             "0": {
                 "title": "Зарядная станция"
             }
         },
         "tagRenderings": {
-            "Auth phone": {
+            "Network": {
                 "question": "К какой сети относится эта станция?",
                 "render": "{network}"
             },
-            "Authentication": {
+            "OH": {
                 "question": "В какое время работает эта зарядная станция?"
             }
-        },
-        "title": {
-            "render": "Зарядная станция"
         },
         "units": {
             "0": {
@@ -1443,6 +1435,17 @@
             "mappings": {
                 "0": {
                     "then": "Контейнер для мусора"
+                }
+            }
+        },
+        "mapRendering": {
+            "0": {
+                "iconSize": {
+                    "mappings": {
+                        "0": {
+                            "then": "Контейнер для мусора"
+                        }
+                    }
                 }
             }
         },

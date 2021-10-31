@@ -1,7 +1,6 @@
 import {FixedUiElement} from "./UI/Base/FixedUiElement";
 import {QueryParameters} from "./Logic/Web/QueryParameters";
 import Combine from "./UI/Base/Combine";
-import ValidatedTextField from "./UI/Input/ValidatedTextField";
 import AvailableBaseLayers from "./Logic/Actors/AvailableBaseLayers";
 import MinimapImplementation from "./UI/Base/MinimapImplementation";
 import CountryCoder from "latlon2country/index";
@@ -33,8 +32,6 @@ if (location.href.startsWith("http://buurtnatuur.be")) {
 
 
 class Init {
-
-
     public static Init(layoutToUse: LayoutConfig, encoded: string) {
 
         if(layoutToUse === null){
@@ -67,11 +64,12 @@ class Init {
 
         const guiState = new DefaultGuiState()
         State.state = new State(layoutToUse);
+        DefaultGuiState.state = guiState;
         // This 'leaks' the global state via the window object, useful for debugging
         // @ts-ignore
         window.mapcomplete_state = State.state;
+        
         new DefaultGUI(State.state, guiState)
-
 
         if (encoded !== undefined && encoded.length > 10) {
             // We save the layout to the user settings and local storage
@@ -80,13 +78,8 @@ class Init {
                     .GetLongPreference("installed-theme-" + layoutToUse.id)
                     .setData(encoded);
             });
-
         }
-
-
     }
-
-
 }
 
 

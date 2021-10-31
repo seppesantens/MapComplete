@@ -352,5 +352,29 @@
                 }
             ]
         }
+    ],
+    "mapRendering": [
+        {
+            "icon": {
+                "render": "./assets/layers/crossings/pedestrian_crossing.svg",
+                "mappings": [
+                    {
+                        "if": {
+                            "or": [
+                                "highway=traffic_signals",
+                                "crossing=traffic_signals"
+                            ]
+                        },
+                        "then": "./assets/layers/crossings/traffic_lights.svg"
+                    }
+                ]
+            },
+            "location": [
+                "point"
+            ]
+        },
+        {
+            "width": "5"
+        }
     ]
 }

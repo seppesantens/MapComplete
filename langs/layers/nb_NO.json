@@ -171,18 +171,13 @@
         }
     },
     "charging_station": {
-        "description": "En ladestasjon",
-        "name": "Ladestasjoner",
         "tagRenderings": {
-            "Auth phone": {
+            "Network": {
                 "render": "{network}"
             },
-            "Authentication": {
+            "OH": {
                 "question": "Når åpnet denne ladestasjonen?"
             }
-        },
-        "title": {
-            "render": "Ladestasjon"
         }
     },
     "ghost_bike": {

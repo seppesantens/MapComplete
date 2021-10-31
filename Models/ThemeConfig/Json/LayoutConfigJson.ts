@@ -118,18 +118,6 @@ export interface LayoutConfigJson {
      * Default: overpassMaxZoom + 1
      */
     osmApiTileSize?: number
-    
-    /**
-     * A tagrendering depicts how to show some tags or how to show a question for it.
-     *
-     * These tagrenderings are applied to _all_ the loaded layers and are a way to reuse tagrenderings.
-     * Note that if multiple themes are loaded (e.g. via the personal theme)
-     * that these roamingRenderings are applied to the layers of the OTHER themes too!
-     *
-     * In order to prevent them to do too much damage, all the overpass-tags of the layers are taken and combined as OR.
-     * These tag renderings will only show up if the object matches this filter.
-     */
-    roamingRenderings?: (TagRenderingConfigJson | string)[],
 
     /**
      * An override applied on all layers of the theme.
@@ -173,26 +161,6 @@ export interface LayoutConfigJson {
      * Define some (overlay) slippy map tilesources
      */
     tileLayerSources?: TilesourceConfigJson[]
-
-    /**
-     * The number of seconds that a feature is allowed to stay in the cache.
-     * The caching flow is as following:
-     *
-     * 1. The application is opened the first time
-     * 2. An overpass query is run
-     * 3. The result is saved to local storage
-     *
-     * On the next opening:
-     *
-     * 1. The application is opened
-     * 2. Data is loaded from cache and displayed
-     * 3. An overpass query is run
-     * 4. All data (both from overpass ánd local storage) are saved again to local storage (except when to old)
-     *
-     * Default value: 60 days
-     */
-    cacheTimout?: number;
-
 
     /**
      * The layers to display.

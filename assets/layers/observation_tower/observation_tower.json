@@ -4,7 +4,7 @@
         "en": "Observation towers",
         "nl": "Uitkijktorens",
         "ru": "Смотровые башни",
-        "de": "Beobachtungstürme"
+        "de": "Aussichtstürme"
     },
     "minzoom": 8,
     "title": {
@@ -29,7 +29,7 @@
     "description": {
         "en": "Towers with a panoramic view",
         "nl": "Torens om van het uitzicht te genieten",
-        "de": "Türme mit Panoramablick"
+        "de": "Türme zur Aussicht auf die umgebende Landschaft"
     },
     "tagRenderings": [
         "images",
@@ -204,5 +204,18 @@
     "allowMove": {
         "enableRelocation": false,
         "enableImproveAccuraccy": true
-    }
+    },
+    "mapRendering": [
+        {
+            "icon": {
+                "render": "circle:white;./assets/layers/observation_tower/Tower_observation.svg"
+            },
+            "iconSize": {
+                "render": "40,40,center"
+            },
+            "location": [
+                "point"
+            ]
+        }
+    ]
 }
