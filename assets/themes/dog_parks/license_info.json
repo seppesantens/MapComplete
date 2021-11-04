@@ -1,0 +1,12 @@
+[
+  {
+    "path": "dog.svg",
+    "license": "BSD",
+    "authors": ["https://github.com/mapbox/maki/graphs/contributors"],
+    "sources": [
+      "By Mapbox", "https://github.com/mapbox/maki/tree/0cfc054f579ad16ead57948da41e025d91643c36/src", "https://commons.wikimedia.org/w/index.php?curid=68612406"
+      ]
+  }
+]
+
+
