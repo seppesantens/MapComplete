@@ -2,30 +2,25 @@ import TileHierarchy from "./TileHierarchy";
 import FeatureSource, {FeatureSourceForLayer, Tiled} from "../FeatureSource";
 import {OsmNode, OsmObject, OsmWay} from "../../Osm/OsmObject";
 import SimpleFeatureSource from "../Sources/SimpleFeatureSource";
-import {UIEventSource} from "../../UIEventSource";
 import FilteredLayer from "../../../Models/FilteredLayer";
 
 
 export default class FullNodeDatabaseSource implements TileHierarchy<FeatureSource & Tiled> {
     public readonly loadedTiles = new Map<number, FeatureSource & Tiled>()
     private readonly onTileLoaded: (tile: (Tiled & FeatureSourceForLayer)) => void;
-    private readonly layer : FilteredLayer
-    
+    private readonly layer: FilteredLayer
+
     constructor(
-        state: {
-            readonly filteredLayers: UIEventSource<FilteredLayer[]>},
-            osmFeatureSource: { rawDataHandlers: ((data: any, tileId: number) => void)[] }, 
+        layer: FilteredLayer,
         onTileLoaded: ((tile: Tiled & FeatureSourceForLayer) => void)) {
         this.onTileLoaded = onTileLoaded
-        this.layer = state.filteredLayers.data.filter(l => l.layerDef.id === "type_node")[0]
-        if(this.layer === undefined){
-            throw "Weird: tracking all nodes, but layer 'type_node' is not defined"
+        this.layer = layer;
+        if (this.layer === undefined) {
+            throw "Layer is undefined"
         }
-        const self = this
-        osmFeatureSource.rawDataHandlers.push((osmJson, tileId) => self.handleOsmXml(osmJson, tileId))
     }
-
-    private handleOsmXml(osmJson: any, tileId: number) {
+    
+    public handleOsmJson(osmJson: any, tileId: number) {
 
         const allObjects = OsmObject.ParseObjects(osmJson.elements)
         const nodesById = new Map<number, OsmNode>()
@@ -57,7 +52,7 @@ export default class FullNodeDatabaseSource implements TileHierarchy<FeatureSour
         })
         const now = new Date()
         const asGeojsonFeatures = Array.from(nodesById.values()).map(osmNode => ({
-            feature: osmNode.asGeoJson(),freshness: now
+            feature: osmNode.asGeoJson(), freshness: now
         }))
 
         const featureSource = new SimpleFeatureSource(this.layer, tileId)
@@ -66,5 +61,7 @@ export default class FullNodeDatabaseSource implements TileHierarchy<FeatureSour
         this.onTileLoaded(featureSource)
 
     }
-    
+
+
 }
+
