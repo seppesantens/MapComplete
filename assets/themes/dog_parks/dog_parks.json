@@ -76,7 +76,7 @@
           }
         ],
         "icon": {
-          "render": "square:#DADADA;./assets/themes/dog_parks/dog.svg"
+          "render": "square:#A1A1A1;./assets/themes/dog_parks/dog.svg"
         },
         "iconOverlays": [
           {
