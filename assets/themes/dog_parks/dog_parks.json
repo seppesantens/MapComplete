@@ -9,7 +9,7 @@
       "de": "Eine Karte die Hundeauslaufzone anzeigt"
     },
     "description": {
-      "en": "On this map you can find and add data of dogs parks. You can use this map to find where you can let your doggy friend run free to their heart's content! :)<br/>Spotted an error or is a dog park missing? You can edit this map with a free OpenStreetMap account. "
+      "en": "On this map you can find and add data of dogs parks. You can use this map to find where you can let your doggy friend run free to their heart's content! <br/>Spotted an error or is a dog park missing? You can edit this map with a free OpenStreetMap account. "
     },
     "language": [
       "en",
@@ -76,7 +76,7 @@
           }
         ],
         "icon": {
-          "render": "square:white;./assets/themes/dog_parks/dog.svg"
+          "render": "square:#DADADA;./assets/themes/dog_parks/dog.svg"
         },
         "iconOverlays": [
           {
