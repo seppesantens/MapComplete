@@ -120,7 +120,7 @@
         "mapRendering": [
           {
             "icon": {
-              "render": "square:white;./assets/themes/dog_parks/dog.svg"
+              "render": "square:#DADADA;./assets/themes/dog_parks/dog.svg"
             },
             "iconBadges": [
               {
