@@ -526,6 +526,21 @@
         ]
       }
     },
+
+    {
+      "id": "side_space",  
+      "question": {
+        "en" : "Space at the side of the toilet"
+      }
+      
+    },
+    {
+      "id": "narrowest_point",  
+      "question": {
+        "en" : "Width of narrowest point from entrance to toilet"
+      }
+      
+    },
     "level",
     "description"
   ],
