@@ -534,13 +534,6 @@
       }
       
     },
-    {
-      "id": "narrowest_point",  
-      "question": {
-        "en" : "Width of narrowest point from entrance to toilet"
-      }
-      
-    },
     "level",
     "description"
   ],
