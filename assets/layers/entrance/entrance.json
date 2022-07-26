@@ -364,8 +364,7 @@
           }
         }
       ]
-    }
-    ,
+    },
     {
       "id": "number_of_steps",
       "question": {
@@ -373,9 +372,16 @@
       },
       "render": {
         "en": "The number of steps is {number_of_steps}"
+      },
+      
+      "freeform": {
+        "key": "number_of_steps",
+        "placeholder": {
+          "en": "Number of steps"
+        },
+        "type": "pnat"
       }
-    }
-    ,
+    },
     {
       "id": "ramp",
       "question": {
@@ -383,6 +389,13 @@
       },
       "render": {
         "en": "Ramp {ramp}"
+      },
+      "freeform": {
+        "key": "ramp",
+        "placeholder": {
+          "en": "Ramp"
+        },
+        "type": "pnat"
       }
     }
   ],

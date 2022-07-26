@@ -526,13 +526,18 @@
         ]
       }
     },
-
     {
-      "id": "side_space",  
+      "id": "side_space",
       "question": {
-        "en" : "Space at the side of the toilet"
+        "en": "Space at the side of the toilet"
+      },
+      "mappings": [{
+        "if":"toilets:side_space=yes",
+        "then" :{
+          "en" : "you will find a spacee in the side."
+        }
       }
-      
+      ]
     },
     "level",
     "description"
@@ -549,7 +554,10 @@
             "es": "Accesible con sillas de ruedas"
           },
           "osmTags": {
-            "or": ["wheelchair=yes", "wheelchair=designated"]
+            "or": [
+              "wheelchair=yes",
+              "wheelchair=designated"
+            ]
           }
         }
       ]
@@ -627,7 +635,10 @@
         "mappings": [
           {
             "if": {
-              "or": ["wheelchair=yes", "wheelchair=designated"]
+              "or": [
+                "wheelchair=yes",
+                "wheelchair=designated"
+              ]
             },
             "then": "circle:white;./assets/layers/toilet/wheelchair.svg"
           },
@@ -642,7 +653,6 @@
           }
         ]
       },
-      
       "iconBadges": [
         {
           "if": "opening_hours~*",

@@ -1068,9 +1068,6 @@
             "bike_shop-access": {
                 "render": "Nur zugänglich für {access}"
             },
-            "bike_shop-email": {
-                "question": "Wie lautet die E-Mail-Adresse von {name}?"
-            },
             "bike_shop-is-bicycle_shop": {
                 "mappings": {
                     "0": {
@@ -1082,12 +1079,6 @@
             "bike_shop-name": {
                 "question": "Wie heißt das Geschäft?",
                 "render": "Das Geschäft heißt {name}"
-            },
-            "bike_shop-phone": {
-                "question": "Wie lautet die Telefonnummer von {name}?"
-            },
-            "bike_shop-website": {
-                "question": "Wie lautet die Webseite von {name}?"
             }
         },
         "title": {

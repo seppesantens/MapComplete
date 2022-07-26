@@ -1068,9 +1068,6 @@
             "bike_shop-access": {
                 "render": "Enkel voor {access}"
             },
-            "bike_shop-email": {
-                "question": "Wat is het email-adres van {name}?"
-            },
             "bike_shop-is-bicycle_shop": {
                 "mappings": {
                     "0": {
@@ -1082,12 +1079,6 @@
             "bike_shop-name": {
                 "question": "Wat is de naam van deze fietszaak?",
                 "render": "Deze fietszaak heet {name}"
-            },
-            "bike_shop-phone": {
-                "question": "Wat is het telefoonnummer van {name}?"
-            },
-            "bike_shop-website": {
-                "question": "Wat is de website van {name}?"
             }
         },
         "title": {
@@ -3297,6 +3288,13 @@
             "render": "Drinkbaar water"
         }
     },
+    "elevator": {
+        "presets": {
+            "0": {
+                "title": "een lift"
+            }
+        }
+    },
     "entrance": {
         "description": "Een laag met ingangen (van gebouwen etc.) waarmee je details kunt aanvullen die belangrijk zijn voor bijvoorbeeld rolstoelgebruikers (en fietsers, leveranciers, …)",
         "name": "Toegang",
@@ -3384,6 +3382,13 @@
                     },
                     "8": {
                         "then": "De deur wordt geopend door personeel wanneer je het vraagt"
+                    }
+                }
+            },
+            "kerb-height": {
+                "mappings": {
+                    "0": {
+                        "then": "Deze deur heeft geen drempel"
                     }
                 }
             },
@@ -3935,6 +3940,32 @@
                 }
             },
             "render": "Hackerspace"
+        }
+    },
+    "hotel": {
+        "description": "Laag die alle hotels toont",
+        "name": "Hotels",
+        "presets": {
+            "0": {
+                "title": "een hotel"
+            }
+        },
+        "tagRenderings": {
+            "name": {
+                "freeform": {
+                    "placeholder": "Naam van het hotel"
+                },
+                "question": "Wat is de naam van dit hotel?",
+                "render": "Dit hotel heet {name}"
+            }
+        },
+        "title": {
+            "mappings": {
+                "0": {
+                    "then": "Hotel {name}"
+                }
+            },
+            "render": "Hotel"
         }
     },
     "hydrant": {
@@ -5948,13 +5979,32 @@
                     },
                     "1": {
                         "then": "Niet toegankelijk voor rolstoelgebruikers"
+                    },
+                    "2": {
+                        "then": "Er is alleen een toilet voor rolstoelgebruikers"
                     }
                 },
                 "question": "Is er een rolstoeltoegankelijke toilet voorzien?"
+            },
+            "wheelchair-door-width": {
+                "question": "Hoe breed is de deur van de rolstoeltoegankelijke toilet?",
+                "render": "De deur naar de rolstoeltoegankelijke toilet is {canonical(door:width)} wide"
             }
         },
         "title": {
             "render": "Toilet"
+        },
+        "units": {
+            "0": {
+                "applicableUnits": {
+                    "0": {
+                        "human": "meter"
+                    },
+                    "1": {
+                        "human": "centimeter"
+                    }
+                }
+            }
         }
     },
     "trail": {
