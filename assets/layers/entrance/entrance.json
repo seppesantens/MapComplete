@@ -325,10 +325,10 @@
     {
       "id": "width",
       "render": {
-        "en": "This door has a width of {canonical(width)} meter",
-        "nl": "Deze deur heeft een breedte van {canonical(width)} meter",
-        "de": "Diese Tür hat eine Durchgangsbreite von {canonical(width)} Meter",
-        "es": "Esta puerta tiene una ancho de {canonical(width)} metros"
+        "en": "This door has a width of {canonical(width)}",
+        "nl": "Deze deur heeft een breedte van {canonical(width)}",
+        "de": "Diese Tür hat eine Durchgangsbreite von {canonical(width)}",
+        "es": "Esta puerta tiene una ancho de {canonical(width)}"
       },
       "question": {
         "en": "What is the width of this door/entrance?",
